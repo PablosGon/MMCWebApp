@@ -17,15 +17,15 @@ export default function ClubPage() {
   useEffect(() => {
     getClub(CLUBS[clubId].id)
       .then((club) => setClub(club))
-  }, [])
+  }, [clubId])
 
   return (
-    <div className="bg pt-50">
-      <header className="container bg-gray-800 p-10 rounded-4xl flex items-center gap-10">
+    <div className="bg pt-10">
+      <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center">
           <img src="/badge-default.png" className="w-50"/>
           <div>
-            <h1 className="text-9xl">{club?.name}</h1>
-            <p className="text-2xl">{club?.description}</p>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl">{club?.name}</h1>
+            <p className="text-sm sm:text-md md:text-lg lg:text-xl xl:text-2xl">{club?.description}</p>
           </div>
       </header>
       <section className="container mt-10">

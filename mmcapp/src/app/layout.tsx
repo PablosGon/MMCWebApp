@@ -25,11 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
       >
         <Header/>
         <div className="bg-[url('../../public/background.png')] bg-cover bg-center h-screen">
-          <main className="container w-400 mx-auto ">
+          <main className="container max-w-400 mx-auto p-5 z-10">
             {children}
           </main>
         </div>

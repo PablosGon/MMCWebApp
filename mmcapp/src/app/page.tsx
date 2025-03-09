@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <ul className="flex gap-10 justify-center pt-20">
+    <ul className="flex flex-wrap gap-10 justify-center pt-20">
       {
         CLUBS.map((club, index) => (
           <li key={index}>
