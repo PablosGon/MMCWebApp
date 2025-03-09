@@ -1,16 +1,21 @@
 "use client";
 
+import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
 import { getClub } from "@/service/club.service";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ClubPage() {
 
+  const { id } = useParams<{ id: string }>();
+  const clubId = parseInt(id);
+
   const [club, setClub] = useState<Club | undefined>(undefined);
 
   useEffect(() => {
-    getClub("2jr9qvrgp")
+    getClub(CLUBS[clubId].id)
       .then((club) => setClub(club))
   }, [])
 
