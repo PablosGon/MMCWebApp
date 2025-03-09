@@ -6,5 +6,6 @@ export interface Club {
     description: string,
     trophies: number,
     requiredTrophies: number,
-    members: ClubMember[]
+    members: ClubMember[],
+    badgeId: number,
 }
