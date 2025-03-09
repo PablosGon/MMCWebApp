@@ -32,16 +32,17 @@ export default function ClubPage() {
         <header>
           <h2 className="text-5xl">Miembros</h2>
         </header>
-        <ul>
+        <ul className="flex flex-col gap-2">
           {
             club?.members.map((member:ClubMember, index:number) => (
-              <li className="bg-gray-800 p-5 rounded-2xl mt-2 mb-2 flex flex-row items-center gap-5" key={member.tag}>
+              <li className="bg-gray-800 p-5 rounded-2xl flex flex-row items-center gap-5" key={member.tag}>
                 <div className="text-2xl w-5">
                   {index + 1}
                 </div>
                 <img src="/profile-icon-default.png" className="w-20"/>
                 <div>
                   <h2 className="text-2xl">{member.name}</h2>
+                  <p>{member.role}</p>
                   <p>🏆{member.trophies}</p>
                 </div>
               </li>
