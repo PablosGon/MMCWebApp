@@ -25,13 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header/>
         <div className="bg-[url('../../public/background.png')] bg-cover bg-center h-screen">
-          <main className="container max-w-400 mx-auto p-5 z-10">
-            {children}
-          </main>
+          <div className="bg-gradient-to-t from-gray-950 from-10% to-transparent to-60% h-screen">
+            <Header/>
+            <main className="container max-w-400 mx-auto pt-30">
+              {children}
+            </main>
+          </div>
         </div>
       </body>
     </html>

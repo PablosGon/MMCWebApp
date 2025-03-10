@@ -23,8 +23,8 @@ export default function ClubPage() {
     <p>Cargando...</p>
   } else {
     return (
-      <div className="bg pt-10">
-        <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center">
+      <div className="bg">
+        <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
             <img src={"https://cdn.brawlify.com/club-badges/regular/" + club?.badgeId + ".png"} className="w-50"/>
             <div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl">{club?.name}</h1>
@@ -35,7 +35,7 @@ export default function ClubPage() {
           <header>
             <h2 className="text-5xl">Miembros</h2>
           </header>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-col gap-3">
             {
               club?.members.map((member:ClubMember, index:number) => (
                 <li className="bg-gray-800 p-5 rounded-2xl flex flex-row items-center gap-5" key={member.tag}>
