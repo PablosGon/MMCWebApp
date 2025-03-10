@@ -1,7 +1,5 @@
-import { PlayerIcon } from "./player-icon.model";
-
 export interface ClubMember {
-    icon: PlayerIcon,
+    iconId: number,
     tag: string,
     name: string,
     trophies: number,

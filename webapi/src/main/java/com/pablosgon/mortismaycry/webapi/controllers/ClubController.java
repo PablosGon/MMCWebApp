@@ -2,14 +2,11 @@ package com.pablosgon.mortismaycry.webapi.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pablosgon.mortismaycry.webapi.clients.BSClient;
-import com.pablosgon.mortismaycry.webapi.models.bs.BSClub;
+import com.pablosgon.mortismaycry.webapi.business.ClubBusiness;
+import com.pablosgon.mortismaycry.webapi.models.Club;
 
-import java.net.http.HttpResponse;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,25 +16,27 @@ import org.springframework.web.bind.annotation.PathVariable;
 @CrossOrigin
 public class ClubController {
     
-    private BSClient bsclient;
+    private ClubBusiness business;
 
-    public ClubController(BSClient bsClient) {
-        this.bsclient = bsClient;
+    public ClubController(ClubBusiness business) {
+        this.business = business;
     }
 
     @GetMapping("/club/{clubTag}")
-    public BSClub GetClub(@PathVariable String clubTag){
-        BSClub club;
-        HttpResponse<String> response = bsclient.getClub(clubTag);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+    public ResponseEntity<Club> getClub(@PathVariable String clubTag){
         try {
-            club = om.readValue(response.body(), BSClub.class);
-        } catch (Exception e){
-            throw new RuntimeException(e.getMessage() + "{\"tag\":\"#2jr9qvrgp\",\"name\":\"Mortis May Cry\"}" + response.body());
-        }
+            Club club = business.getClub(clubTag);
 
-        return club;
+            if(club != null) {
+                return new ResponseEntity<>(club, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } catch(IllegalArgumentException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }

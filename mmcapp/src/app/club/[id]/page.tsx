@@ -42,7 +42,7 @@ export default function ClubPage() {
                   <div className="text-2xl w-5">
                     {index + 1}
                   </div>
-                  <img src={"https://cdn.brawlify.com/profile-icons/regular/" + member.icon.id + ".png"} className="w-20"/>
+                  <img src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} className="w-20"/>
                   <div>
                     <h2 className="text-2xl">{member.name}</h2>
                     <p>{member.role}</p>
