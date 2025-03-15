@@ -2,11 +2,8 @@ package com.pablosgon.mortismaycry.webapi.models.bs;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class BSClub {
 
-    @JsonProperty("tag")
     private String tag;
     private String name;
     private String description;

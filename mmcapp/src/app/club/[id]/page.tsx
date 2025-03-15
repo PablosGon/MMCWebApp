@@ -4,6 +4,7 @@ import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
 import { getClub } from "@/service/club.service";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -38,16 +39,18 @@ export default function ClubPage() {
           <ul className="flex flex-col gap-3">
             {
               club?.members.map((member:ClubMember, index:number) => (
-                <li className="bg-gray-800 p-5 rounded-2xl flex flex-row items-center gap-5" key={member.tag}>
-                  <div className="text-2xl w-5">
-                    {index + 1}
-                  </div>
-                  <img src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} className="w-20"/>
-                  <div>
-                    <h2 className="text-2xl">{member.name}</h2>
-                    <p>{member.role}</p>
-                    <p>🏆{member.trophies}</p>
-                  </div>
+                <li className="bg-gray-800 p-5 rounded-2xl " key={member.tag}>
+                  <Link href={"/player/" + member.tag.replace("#", "")} className="flex flex-row items-center gap-5">
+                    <div className="text-2xl w-5">
+                      {index + 1}
+                    </div>
+                    <img src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} className="w-20"/>
+                    <div>
+                      <h2 className="text-2xl">{member.name}</h2>
+                      <p>{member.role}</p>
+                      <p>🏆{member.trophies}</p>
+                    </div>
+                  </Link>
                 </li>
               ))
             }

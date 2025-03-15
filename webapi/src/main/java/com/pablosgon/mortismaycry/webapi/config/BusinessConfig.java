@@ -4,15 +4,21 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.pablosgon.mortismaycry.webapi.business.ClubBusiness;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pablosgon.mortismaycry.webapi.business.*;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 
 @Configuration
 public class BusinessConfig {
     
     @Bean
-    ClubBusiness clubBusiness(BSClient bsclient, ModelMapper mapper) {
-        return new ClubBusiness(bsclient, mapper);
+    ClubBusiness clubBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper) {
+        return new ClubBusinessImpl(client, mapper, objectMapper);
+    }
+
+    @Bean
+    PlayerBusiness playerBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper) {
+        return new PlayerBusinessImpl(client, mapper, objectMapper);
     }
 
 }
