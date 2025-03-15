@@ -5,11 +5,14 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class BSClientImpl implements BSClient {
 
     private final HttpClient httpClient;
 
-    private final String API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjA5OWY3ZmYyLWY4ZjgtNGI2MC1hMjViLTg1ZGRhOWEzMzJiMiIsImlhdCI6MTc0MjA1ODQ3OSwic3ViIjoiZGV2ZWxvcGVyL2IyMDIwNTgwLThhMjktYzlhZS1jMGM3LWJhNzhiNDVjMjdmMyIsInNjb3BlcyI6WyJicmF3bHN0YXJzIl0sImxpbWl0cyI6W3sidGllciI6ImRldmVsb3Blci9zaWx2ZXIiLCJ0eXBlIjoidGhyb3R0bGluZyJ9LHsiY2lkcnMiOlsiNjIuODMuMjE1LjYyIl0sInR5cGUiOiJjbGllbnQifV19.EmuBrkAicq2RhZ-LaPPXMRn1CV7OelSVhakdI5xaqD3JUgw7YVfmIn92Md9iZ1wlJyjxOG97cpuF2OaKjJJkGg";
+    @Value("${app.bs.api.key}")
+    private String API_KEY;
 
     public BSClientImpl(HttpClient webClient) {
         this.httpClient = webClient;

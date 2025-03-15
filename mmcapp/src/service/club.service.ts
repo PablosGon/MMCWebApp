@@ -1,7 +1,8 @@
 import { Club } from "@/models/club.model";
 
 export async function getClub(clubTag:string):Promise<Club> {
-    const response = await fetch(`http://localhost:8080/club/${clubTag}`);
+    console.log(process.env.API_URL)
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `club/${clubTag}`);
 
     if (!response.ok) {
         throw new Error(`API Error: ${response.status}`);
