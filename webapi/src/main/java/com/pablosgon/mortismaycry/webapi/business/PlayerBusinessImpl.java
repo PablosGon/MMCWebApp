@@ -27,12 +27,15 @@ public class PlayerBusinessImpl implements PlayerBusiness {
             throw new IllegalArgumentException("player tag must not be null");
         }
 
+        System.out.println("Getting Club " + tag);
+
         Player player;
 
         try {
             HttpResponse<String> response = client.getPlayer(tag);
             BSPlayer bsPlayer = objectMapper.readValue(response.body(), BSPlayer.class);
             player = mapper.map(bsPlayer, Player.class);
+            System.out.println("Get Player successful: " + response.body());
         } catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }

@@ -27,17 +27,19 @@ public class ClubBusinessImpl implements ClubBusiness {
             throw new IllegalArgumentException("club tag must not be null");
         }
 
+        System.out.println("Getting Club " + tag);
+
         Club club;
 
         try {
             HttpResponse<String> response = client.getClub(tag);
             BSClub bsClub = objectMapper.readValue(response.body(), BSClub.class);
             club = mapper.map(bsClub, Club.class);
+            System.out.println("Get Club successful: " + response.body());
         } catch (Exception e){
             System.out.println(e);
             throw new RuntimeException(e.getMessage());
         }
-
         return club;
     }
 
