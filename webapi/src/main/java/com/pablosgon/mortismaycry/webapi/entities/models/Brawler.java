@@ -1,9 +1,6 @@
-package com.pablosgon.mortismaycry.webapi.models.bs;
+package com.pablosgon.mortismaycry.webapi.entities.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class BSBrawlerStat {
+public class Brawler {
     
     private int id;
     private int rank;
@@ -11,7 +8,7 @@ public class BSBrawlerStat {
     private int highestTrophies;
     private int power;
     private String name;
-    
+
 
     public int getId() {
         return this.id;
@@ -60,6 +57,5 @@ public class BSBrawlerStat {
     public void setName(String name) {
         this.name = name;
     }
-
 
 }

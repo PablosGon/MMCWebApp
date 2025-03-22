@@ -1,5 +1,6 @@
 "use client";
 
+import ClubMemberItem from "@/components/clubs/club-member-item.component";
 import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
@@ -40,17 +41,7 @@ export default function ClubPage() {
             {
               club?.members.map((member:ClubMember, index:number) => (
                 <li className="bg-gray-800 p-5 rounded-2xl " key={member.tag}>
-                  <Link href={"/player/" + member.tag.replace("#", "")} className="flex flex-row items-center gap-5">
-                    <div className="text-2xl w-5">
-                      {index + 1}
-                    </div>
-                    <img src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} className="w-20"/>
-                    <div>
-                      <h2 className="text-2xl">{member.name}</h2>
-                      <p>{member.role}</p>
-                      <p>🏆{member.trophies}</p>
-                    </div>
-                  </Link>
+                    <ClubMemberItem member={member} index={index}/>
                 </li>
               ))
             }

@@ -1,15 +1,15 @@
-package com.pablosgon.mortismaycry.webapi.models.bs;
+package com.pablosgon.mortismaycry.webapi.entities.models;
 
 import java.util.List;
 
-public class BSClub {
-
+public class Club {
+    
     private String tag;
     private String name;
     private String description;
     private int trophies;
     private int requiredTrophies;
-    private List<BSClubMember> members;
+    private List<ClubMember> members;
     private String type;
     private int badgeId;
 
@@ -53,11 +53,11 @@ public class BSClub {
         this.requiredTrophies = requiredTrophies;
     }
 
-    public List<BSClubMember> getMembers() {
+    public List<ClubMember> getMembers() {
         return members;
     }
 
-    public void setMembers(List<BSClubMember> members) {
+    public void setMembers(List<ClubMember> members) {
         this.members = members;
     }
 

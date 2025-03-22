@@ -7,10 +7,11 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pablosgon.mortismaycry.webapi.models.ClubMember;
-import com.pablosgon.mortismaycry.webapi.models.Player;
-import com.pablosgon.mortismaycry.webapi.models.bs.BSClubMember;
-import com.pablosgon.mortismaycry.webapi.models.bs.BSPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.ClubMember;
+import com.pablosgon.mortismaycry.webapi.entities.models.Player;
+import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
+import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
 
 @Configuration
 public class MapperConfig {
@@ -29,6 +30,11 @@ public class MapperConfig {
                 m.map(src -> src.getClub().getName(), Player::setClubName);
                 m.map(src -> src.getClub().getTag(), Player::setClubTag);
                 m.map(src -> src.getIcon().getId(), Player::setIconId);
+            });
+
+        mapper.typeMap(JPAPlayer.class, Player.class)
+            .addMappings(m -> {
+                m.map(src -> src.getSeasonTrophyProgress(), Player::setSeasonTrophyProgress);
             });
 
         return mapper;

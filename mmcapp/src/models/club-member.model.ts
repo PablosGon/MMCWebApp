@@ -4,4 +4,5 @@ export interface ClubMember {
     name: string,
     trophies: number,
     role:string,
+    lastRegistry:number,
 }

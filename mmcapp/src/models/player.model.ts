@@ -1,3 +1,5 @@
+import { TrophyRegistry } from "./trophy-registry.model";
+
 export interface Player {
     tag: string,
     name: string,
@@ -6,6 +8,7 @@ export interface Player {
     iconId: number,
     trophies: number,
     higherstTrophies: number,
-    bestBrawlerName: string,
-    bestBrawlerTrophies: number,
+    nameColor: string,
+    trophyRegistries: TrophyRegistry[],
+    seasonTrophyProgress: number[],
 }

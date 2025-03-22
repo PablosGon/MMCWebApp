@@ -1,5 +1,6 @@
-package com.pablosgon.mortismaycry.webapi.models;
+package com.pablosgon.mortismaycry.webapi.entities.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
@@ -14,6 +15,8 @@ public class Player {
     private List<Brawler> brawlers;
     private String nameColor;
 
+    private List<TrophyRegistry> trophyRegistries = new ArrayList<>();
+    private List<Integer> seasonTrophyProgress = new ArrayList<>();
 
     public String getTag() {
         return this.tag;
@@ -85,6 +88,22 @@ public class Player {
 
     public void setNameColor(String nameColor) {
         this.nameColor = nameColor;
+    }
+
+    public List<TrophyRegistry> getTrophyRegistries() {
+        return this.trophyRegistries;
+    }
+
+    public void setTrophyRegistries(List<TrophyRegistry> trophyRegistries) {
+        this.trophyRegistries = trophyRegistries;
+    }
+
+    public List<Integer> getSeasonTrophyProgress() {
+        return this.seasonTrophyProgress;
+    }
+
+    public void setSeasonTrophyProgress(List<Integer> seasonTrophyProgress) {
+        this.seasonTrophyProgress = seasonTrophyProgress;
     }
 
 }

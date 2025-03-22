@@ -1,20 +1,20 @@
-package com.pablosgon.mortismaycry.webapi.models;
+package com.pablosgon.mortismaycry.webapi.entities.models.bs;
 
-public class ClubMember {
+public class BSClubMember {
     
-    private int iconId;
+    private BSPlayerIcon icon;
     private String tag;
     private String name;
     private int trophies;
     private String role;
     private String nameColor;
 
-    public int getIconId() {
-        return this.iconId;
+    public BSPlayerIcon getIcon() {
+        return this.icon;
     }
 
-    public void setIconId(int iconId) {
-        this.iconId = iconId;
+    public void setIcon(BSPlayerIcon icon) {
+        this.icon = icon;
     }
 
     public String getTag() {
@@ -56,6 +56,5 @@ public class ClubMember {
     public void setNameColor(String nameColor) {
         this.nameColor = nameColor;
     }
-
 
 }

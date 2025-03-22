@@ -1,4 +1,4 @@
-package com.pablosgon.mortismaycry.webapi.models.bs;
+package com.pablosgon.mortismaycry.webapi.entities.models.bs;
 
 public class BSPlayerClub {
     

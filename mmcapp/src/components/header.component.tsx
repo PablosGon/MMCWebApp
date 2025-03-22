@@ -2,11 +2,10 @@ import Link from "next/link";
 
 export default function Header() {
     return (
-        <header className="h-25 bg-gradient-to-r from-purple-800 to-purple-950 p-5">
-            <Link href="/" className="text-6xl">
-                MMC App
+        <header className="h-30 bg-gradient-to-r from-purple-800 to-purple-950">
+            <Link href="/">
+                <img src="/AppLogo_Beta.png"  className="max-w-80"/>
             </Link>
-            <small className="text-lg">beta</small>
         </header>
     );
 }
