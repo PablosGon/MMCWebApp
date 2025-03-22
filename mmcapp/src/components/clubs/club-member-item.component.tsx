@@ -1,6 +1,5 @@
 import { ClubMember } from "@/models/club-member.model";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function ClubMemberItem(params: { member: ClubMember, index:number }) {
 
@@ -8,7 +7,7 @@ export default function ClubMemberItem(params: { member: ClubMember, index:numbe
     const index = params.index;
 
     return (
-        <Link href={"/player/" + member.tag.replace("#", "")} className="flex flex-row items-center gap-5">
+        <div className="flex flex-row items-center gap-5">
             <div className="text-2xl w-5">
                 {index + 1}
             </div>
@@ -25,6 +24,7 @@ export default function ClubMemberItem(params: { member: ClubMember, index:numbe
                     } 
                 </p>
             </div>
-        </Link>
+            <p className="ml-auto">→</p>
+        </div>
     )
 }

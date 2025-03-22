@@ -1,14 +1,13 @@
 import { Player } from "@/models/player.model";
 
-export async function getOrCreatePlayer(playerTag: string) {
+export async function getOrCreatePlayer(playerTag: string): Promise<Player> {
     try {
         const player = await getPlayer(playerTag);
         return player;
     } catch (error) {
         const err = error as { response: Response };
         if(err.response.status === 404) {
-            console.log(`Player ${playerTag} not found. Creating...`);
-            return await postPlayer(playerTag); // Si es un 404, lo creamos
+            return await postPlayer(playerTag);
         }
         throw error;
     }

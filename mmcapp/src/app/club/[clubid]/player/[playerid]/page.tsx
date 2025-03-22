@@ -1,36 +1,47 @@
 "use client"
 import { TrophyChart } from "@/components/player/trophy-chart.component";
+import ErrorComponent from "@/components/shared/error.component";
+import LoadingComponent from "@/components/shared/loading.component";
 import { Player } from "@/models/player.model";
 import { getOrCreatePlayer } from "@/service/player.service";
 import Image from "next/image";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function PlayerPage() {
 
-    const { id } = useParams<{ id: string }>();
+    const { playerid } = useParams<{ playerid: string }>();
+    const { clubid } = useParams<{ clubid: string }>();
     
     const [player, setPlayer] = useState<Player | undefined>();
+    const [error, setError] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchPlayer = async() => {
             try {
-                const data = await getOrCreatePlayer(id);
+                const data = await getOrCreatePlayer(playerid);
                 setPlayer(data);    
-            } catch {
-
+            } catch (error) {
+                console.log(error);
+                setError(true);
             }
         }
         fetchPlayer();
-    }, [id])
+    }, [playerid])
 
-    if(!player){
+    if (error) {
         return (
-            <p>Cargando...</p>
+            <ErrorComponent/>
+        )
+    } else if (!player){
+        return (
+            <LoadingComponent/>
         )
     } else {
         return (
             <div className="bg">
+                <Link href={`/club/${clubid}`} className="text-lg">← Volver</Link>
                 <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
                     <Image src={"https://cdn.brawlify.com/profile-icons/regular/" + player.iconId + ".png"} alt={`Player icon`} width={500} height={500} className="w-50"/>
                     <div>
