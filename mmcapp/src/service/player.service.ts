@@ -4,8 +4,9 @@ export async function getOrCreatePlayer(playerTag: string) {
     try {
         const player = await getPlayer(playerTag);
         return player;
-    } catch (error: any) {
-        if(error.response.status === 404) {
+    } catch (error) {
+        const err = error as { response: Response };
+        if(err.response.status === 404) {
             console.log(`Player ${playerTag} not found. Creating...`);
             return await postPlayer(playerTag); // Si es un 404, lo creamos
         }

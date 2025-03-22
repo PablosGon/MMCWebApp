@@ -5,7 +5,7 @@ import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
 import { getClub } from "@/service/club.service";
-import Link from "next/link";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -27,7 +27,7 @@ export default function ClubPage() {
     return (
       <div className="bg">
         <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
-            <img src={"https://cdn.brawlify.com/club-badges/regular/" + club?.badgeId + ".png"} className="w-50"/>
+            <Image src={"https://cdn.brawlify.com/club-badges/regular/" + club?.badgeId + ".png"} alt="Club Badge" width={500} height={500} className="w-50"/>
             <div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl">{club?.name}</h1>
               <p className="text-sm sm:text-md md:text-lg lg:text-xl xl:text-2xl">{club?.description}</p>

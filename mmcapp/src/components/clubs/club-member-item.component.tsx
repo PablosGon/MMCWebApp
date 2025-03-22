@@ -1,4 +1,5 @@
 import { ClubMember } from "@/models/club-member.model";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function ClubMemberItem(params: { member: ClubMember, index:number }) {
@@ -11,7 +12,7 @@ export default function ClubMemberItem(params: { member: ClubMember, index:numbe
             <div className="text-2xl w-5">
                 {index + 1}
             </div>
-            <img src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} className="w-20"/>
+            <Image src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} alt={member.name} width={100} height={100} className="w-20"/>
             <div>
                 <h2 className="text-lg lg:text-2xl">{member.name}</h2>
                 <p className="text-md">{member.role}</p>

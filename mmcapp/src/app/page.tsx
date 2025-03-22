@@ -1,4 +1,5 @@
 import { CLUBS } from "@/constants/clubs-names.constant";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -9,7 +10,7 @@ export default function Home() {
           <li key={index}>
             <Link href={"/club/" + index}>
               <div className="w-75 h-75 bg-gray-800 rounded-4xl text-center flex flex-col justify-center p-5">
-                <img src={"/clubs/" + index + ".png"}/>
+                <Image src={"/clubs/" + index + ".png"} alt={club.name} width={500} height={500}/>
                 <h2 className="text-2xl">{club.name}</h2>
               </div>
             </Link>

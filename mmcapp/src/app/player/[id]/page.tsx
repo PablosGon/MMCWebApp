@@ -2,6 +2,7 @@
 import { TrophyChart } from "@/components/player/trophy-chart.component";
 import { Player } from "@/models/player.model";
 import { getOrCreatePlayer } from "@/service/player.service";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -16,7 +17,7 @@ export default function PlayerPage() {
             try {
                 const data = await getOrCreatePlayer(id);
                 setPlayer(data);    
-            } catch (error) {
+            } catch {
 
             }
         }
@@ -31,7 +32,7 @@ export default function PlayerPage() {
         return (
             <div className="bg">
                 <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
-                    <img src={"https://cdn.brawlify.com/profile-icons/regular/" + player.iconId + ".png"} className="w-50"/>
+                    <Image src={"https://cdn.brawlify.com/profile-icons/regular/" + player.iconId + ".png"} alt={`Player icon`} width={500} height={500} className="w-50"/>
                     <div>
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-7xl">{player.name}</h1>
                         <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text4xl">{player.trophies} trofeos</h2>

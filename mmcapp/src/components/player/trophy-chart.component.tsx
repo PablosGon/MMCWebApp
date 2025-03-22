@@ -1,5 +1,4 @@
 import { Player } from "@/models/player.model";
-import { TrophyRegistry } from "@/models/trophy-registry.model";
 import { Chart, LogarithmicScale } from "chart.js";
 import { CategoryScale, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from "chart.js";
 import { Line } from "react-chartjs-2";
