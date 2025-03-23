@@ -12,7 +12,6 @@ public class Player {
     private int iconId;
     private int trophies;
     private int highestTrophies;
-    private List<Brawler> brawlers;
     private String nameColor;
 
     private List<TrophyRegistry> trophyRegistries = new ArrayList<>();
@@ -72,14 +71,6 @@ public class Player {
 
     public void setHighestTrophies(int highestTrophies) {
         this.highestTrophies = highestTrophies;
-    }
-
-    public List<Brawler> getBrawlers() {
-        return this.brawlers;
-    }
-
-    public void setBrawlers(List<Brawler> brawlers) {
-        this.brawlers = brawlers;
     }
 
     public String getNameColor() {
