@@ -6,7 +6,9 @@ import org.modelmapper.ModelMapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
+import com.pablosgon.mortismaycry.webapi.constants.ClubConstants;
 import com.pablosgon.mortismaycry.webapi.entities.models.Player;
+import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClub;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
 import com.pablosgon.mortismaycry.webapi.exceptions.NotFoundException;
@@ -62,7 +64,7 @@ public class PlayerBusinessImpl implements PlayerBusiness {
 
     @Override
     public Player createPlayer(String tag) throws Exception {
-        if(tag == null) {
+        if(tag == null || notInClub(tag)) {
             throw new IllegalArgumentException();
         }
 
@@ -86,5 +88,31 @@ public class PlayerBusinessImpl implements PlayerBusiness {
         return player;
     }
     
+    //#region
+
+    private boolean notInClub(String tag) throws Exception {
+        boolean inClub = false;
+        
+        try {
+            String[] clubIds = ClubConstants.CLUB_IDS;
+            for (String id : clubIds) {
+                BSClub club = objectMapper.readValue(client.getClub(id).body(), BSClub.class);
+                if(playerInBSClub(tag, club)) {
+                    inClub = true;
+                    continue;
+                }
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        
+        return !inClub;
+    }
+
+    private boolean playerInBSClub(String playerTag, BSClub club) {
+        return club.getMembers().stream().anyMatch(x -> x.getTag().replace("#", "").equals(playerTag));
+    }
+
+    //#endregion
     
 }
