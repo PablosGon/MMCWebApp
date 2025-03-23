@@ -4,12 +4,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pablosgon.mortismaycry.webapi.business.ClubBusiness;
 import com.pablosgon.mortismaycry.webapi.entities.models.Club;
+import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -39,5 +43,19 @@ public class ClubController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping("/updateMembers")
+    public ResponseEntity<Club> updateMembers(@RequestBody UpdateMembersRequest request) {
+        try {
+            business.updateMembers(request);
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        } catch(Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
+        
+        return ResponseEntity.ok().build();
+    }
+    
 
 }

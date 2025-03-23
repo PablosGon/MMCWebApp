@@ -12,4 +12,7 @@ public interface TrophyRegistryRepository extends JpaRepository<JPATrophyRegistr
     @Query("select r from JPATrophyRegistry r where r.player.tag = :tag")
     List<JPATrophyRegistry> findRegistriesByPlayerTag(String tag);
 
+    @Query("select r from JPATrophyRegistry r where r.season = :season and week = :week")
+    List<JPATrophyRegistry> findRegistriedByWeek(int season, int week);
+
 }

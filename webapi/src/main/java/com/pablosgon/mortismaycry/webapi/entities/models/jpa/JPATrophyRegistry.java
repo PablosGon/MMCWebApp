@@ -1,6 +1,8 @@
 package com.pablosgon.mortismaycry.webapi.entities.models.jpa;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -11,6 +13,7 @@ import jakarta.persistence.Table;
 public class JPATrophyRegistry {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private int trophies;
@@ -20,6 +23,15 @@ public class JPATrophyRegistry {
     @ManyToOne
     @JoinColumn(name = "player")
     private JPAPlayer player;
+
+    public JPATrophyRegistry() {}
+
+    public JPATrophyRegistry(int trophies, int season, int week, JPAPlayer player) {
+        this.trophies = trophies;
+        this.season = season;
+        this.week = week;
+        this.player = player;
+    }
 
 
     public int getId() {

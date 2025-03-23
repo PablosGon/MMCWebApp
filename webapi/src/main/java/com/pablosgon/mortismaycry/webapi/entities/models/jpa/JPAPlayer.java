@@ -20,6 +20,12 @@ public class JPAPlayer {
     @OneToMany(mappedBy = "player")
     private List<JPATrophyRegistry> trophyRegistries;
 
+    public JPAPlayer() {}
+
+    public JPAPlayer(String tag) {
+        this.tag = tag;
+    }
+
     public String getTag() {
         return this.tag;
     }
