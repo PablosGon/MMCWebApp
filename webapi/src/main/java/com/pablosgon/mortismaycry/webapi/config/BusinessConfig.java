@@ -14,8 +14,8 @@ import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 public class BusinessConfig {
     
     @Bean
-    ClubBusiness clubBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, TrophyRegistryRepository trophyRegistryRepository) {
-        return new ClubBusinessImpl(client, mapper, objectMapper, trophyRegistryRepository);
+    ClubBusiness clubBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, TrophyRegistryRepository trophyRegistryRepository, PlayerRepository playerRepository) {
+        return new ClubBusinessImpl(client, mapper, objectMapper, trophyRegistryRepository, playerRepository);
     }
 
     @Bean
