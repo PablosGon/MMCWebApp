@@ -4,6 +4,7 @@ import ClubMemberItem from "@/components/clubs/club-member-item.component";
 import ErrorComponent from "@/components/shared/error.component";
 import LoadingComponent from "@/components/shared/loading.component";
 import { CLUBS } from "@/constants/clubs-names.constant";
+import { ClubMembersOrderBy } from "@/enums/club-members-orderby.enum";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
 import { getClub } from "@/service/club.service";
@@ -19,11 +20,25 @@ export default function ClubPage() {
 
   const [club, setClub] = useState<Club | undefined>(undefined);
   const [error, setError] = useState<boolean>(false);
+  const [sortBy, setSortBy] = useState<ClubMembersOrderBy>(ClubMembersOrderBy.Trophies);
+
+  const members = club?.members.sort((a, b) => {
+    switch (sortBy) {
+      case ClubMembersOrderBy.Trophies:
+        return b.trophies - a.trophies;
+      case ClubMembersOrderBy.LastWeek:
+        return b.lastRegistry - a.lastRegistry;
+      case ClubMembersOrderBy.Name:
+        return a.name.localeCompare(b.name);
+      default:
+        return 0;
+    }
+  });
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getClub(CLUBS[clubId].id);
+        const data: Club = await getClub(CLUBS[clubId].id);
         setClub(data);  
       } catch {
         setError(true);
@@ -53,12 +68,21 @@ export default function ClubPage() {
             </div>
         </header>
         <section className="container mt-10">
-          <header>
-            <h2 className="text-5xl">Miembros</h2>
+          <header className="flex">
+            <h2 className="text-3xl md:text5xl">Miembros</h2>
+            <label className="ml-auto">
+              Ordernar por
+              <select onChange={(e) => setSortBy(Number(e.target.value) as ClubMembersOrderBy)} value={sortBy}>
+                <option value={ClubMembersOrderBy.Trophies}>Trofeos</option>
+                <option value={ClubMembersOrderBy.LastWeek}>Última semana</option>
+                <option value={ClubMembersOrderBy.Name}>Nombre</option>
+              </select>
+            </label>
+
           </header>
           <ul className="flex flex-col gap-3">
             {
-              club?.members.map((member:ClubMember, index:number) => (
+              members?.map((member:ClubMember, index:number) => (
                 <li className="bg-gray-800 p-5 rounded-2xl " key={member.tag}>
                   <Link href={`/club/${clubId}/player/${member.tag.replace("#", "")}`}>
                     <ClubMemberItem member={member} index={index}/>
