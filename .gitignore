@@ -1,2 +1,5 @@
 webapi/src/.env
 webapi/mmc-api-kv.pem
+dastabase-backup.sql
+players_20250326.csv
+registries_20250326.csv
