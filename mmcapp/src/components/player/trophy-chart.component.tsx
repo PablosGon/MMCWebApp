@@ -19,13 +19,21 @@ export function TrophyChart(params:{player:Player}) {
     const player = params.player;
 
     const trophyUpgrades = player.seasonTrophyProgress;
+    const trophyRegistries = player.trophyRegistries.filter(x => x.week != 0);
 
     console.log([0, ...trophyUpgrades], trophyUpgrades)
 
     if(trophyUpgrades.length == 0) {
         return (
             <div className="h-50 flex items-center">
-                <p className="text-xl text-center">Aún no tenemos datos sobre este jugador. ¡Vuelve pronto!</p>
+                <p className="text-xl text-center">
+                {
+                    trophyRegistries.length > 1 ?
+                        "¡La temporada acaba de empezar! Vuelve pronto para ver tu progreso de temporada"
+                    : 
+                        "Aún no tenemos datos sobre este jugador. ¡Vuelve pronto!"
+                }
+                </p>
             </div>
         )
     }

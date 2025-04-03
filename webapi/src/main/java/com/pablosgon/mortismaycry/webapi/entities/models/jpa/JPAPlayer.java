@@ -48,7 +48,7 @@ public class JPAPlayer {
         }
         
         int currentSeason = Collections.max(trophyRegistries.stream().map(x -> x.getSeason()).toList());
-        int currentWeek = Collections.max(trophyRegistries.stream().map(x -> x.getWeek()).toList());
+        int currentWeek = Collections.max(trophyRegistries.stream().filter(x -> x.getSeason() == currentSeason).map(x -> x.getWeek()).toList());
         List<JPATrophyRegistry> seasonRegistries = trophyRegistries.stream().filter(x -> x.getSeason() == currentSeason).toList();
 
         List<Integer> filledSeasonTrophyList = new ArrayList<>();
