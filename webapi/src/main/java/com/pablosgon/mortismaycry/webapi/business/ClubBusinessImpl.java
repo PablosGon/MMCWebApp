@@ -92,9 +92,12 @@ public class ClubBusinessImpl implements ClubBusiness {
 
     private void setLastRegistry(ClubMember clubMember, List<JPATrophyRegistry> memberRegistries) {
         int lastRegistry = -1;
-        int offset = memberRegistries.get(memberRegistries.size() - 1).getWeek() == 0 ? 2 : 1;
-        if(memberRegistries.size() > offset) {
-            lastRegistry = memberRegistries.get(memberRegistries.size() - offset).getTrophies() - memberRegistries.get(memberRegistries.size() - (offset + 1)).getTrophies();
+
+        if (!memberRegistries.isEmpty()) {
+            int offset = memberRegistries.get(memberRegistries.size() - 1).getWeek() == 0 ? 2 : 1;
+            if (memberRegistries.size() > offset) {
+                lastRegistry = memberRegistries.get(memberRegistries.size() - offset).getTrophies() - memberRegistries.get(memberRegistries.size() - (offset + 1)).getTrophies();
+            }    
         }
         clubMember.setLastRegistry(lastRegistry);
     }
