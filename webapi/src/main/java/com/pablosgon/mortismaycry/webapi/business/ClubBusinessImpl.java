@@ -83,7 +83,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     //#region Private methods
 
     private void mapRegistriesToMembers(List<ClubMember> members) {
-        List<JPATrophyRegistry> trophyRegistries = trophyRegistryRepository.findAll();
+        List<JPATrophyRegistry> trophyRegistries = trophyRegistryRepository.findAllSorted();
         for (ClubMember clubMember : members) {
             List<JPATrophyRegistry> memberRegistries = trophyRegistries.stream().filter(x -> x.getPlayer().getTag().equals(clubMember.getTag().replace("#", ""))).toList();
             setLastRegistry(clubMember, memberRegistries);
