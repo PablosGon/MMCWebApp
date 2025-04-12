@@ -1,6 +1,6 @@
 package com.pablosgon.mortismaycry.webapi.entities.models;
 
-public class StarPlayerWeeklyRegistry extends StarPlayerRegistry {
+public class StarWeekPlayer extends StarPlayer {
     
     private int week;
     private int trophies;

@@ -1,6 +1,6 @@
 package com.pablosgon.mortismaycry.webapi.entities.models;
 
-public class StarLegendRegistry extends StarPlayerRegistry {
+public class StarSeasonPlayer extends StarPlayer {
     
     private int trophies;
 

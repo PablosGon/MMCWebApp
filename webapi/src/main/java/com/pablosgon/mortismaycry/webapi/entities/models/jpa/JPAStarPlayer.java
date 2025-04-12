@@ -14,8 +14,8 @@ import jakarta.persistence.Table;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "type")
-@Table(name = "star_player_registries")
-public abstract class JPAStarPlayerRegistry {
+@Table(name = "star_players")
+public class JPAStarPlayer {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,10 @@ public abstract class JPAStarPlayerRegistry {
     @JoinColumn(name = "player")
     private JPAPlayer player;
 
-    private int season;
+    @ManyToOne
+    @JoinColumn(name = "season")
+    private JPASeason season;
+
     private int clubId;
 
 
@@ -45,11 +48,11 @@ public abstract class JPAStarPlayerRegistry {
         this.player = player;
     }
 
-    public int getSeason() {
+    public JPASeason getSeason() {
         return this.season;
     }
 
-    public void setSeason(int season) {
+    public void setSeason(JPASeason season) {
         this.season = season;
     }
 

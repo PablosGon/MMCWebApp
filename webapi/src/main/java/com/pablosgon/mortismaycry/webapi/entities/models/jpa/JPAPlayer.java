@@ -20,11 +20,16 @@ public class JPAPlayer {
     @OneToMany(mappedBy = "player")
     private List<JPATrophyRegistry> trophyRegistries;
 
+    @OneToMany(mappedBy = "player")
+    private List<JPAStarPlayer> starPlayerRegistries;
+
+
     public JPAPlayer() {}
 
     public JPAPlayer(String tag) {
         this.tag = tag;
     }
+    
 
     public String getTag() {
         return this.tag;
@@ -41,6 +46,15 @@ public class JPAPlayer {
     public void setTrophyRegistries(List<JPATrophyRegistry> trophyRegistries) {
         this.trophyRegistries = trophyRegistries;
     }
+
+    public List<JPAStarPlayer> getStarPlayerRegistries() {
+        return this.starPlayerRegistries;
+    }
+
+    public void setStarPlayerRegistries(List<JPAStarPlayer> starPlayerRegistries) {
+        this.starPlayerRegistries = starPlayerRegistries;
+    }
+
     
     public List<Integer> getSeasonTrophyProgress() {
         if(trophyRegistries == null || trophyRegistries.isEmpty()) {

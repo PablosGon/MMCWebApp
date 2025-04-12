@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.business.*;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
+import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 
 @Configuration
@@ -21,6 +22,11 @@ public class BusinessConfig {
     @Bean
     PlayerBusiness playerBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, PlayerRepository playerRepository) {
         return new PlayerBusinessImpl(client, mapper, objectMapper, playerRepository);
+    }
+
+    @Bean
+    SeasonBusiness seasonBusiness(ModelMapper mapper, SeasonRepository seasonRepository) {
+        return new SeasonBusinessImpl(mapper, seasonRepository);
     }
 
 }

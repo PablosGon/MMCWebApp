@@ -6,8 +6,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @DiscriminatorValue("weekly")
-@Table(name = "star_player_weekly_registries")
-public class JPAStarPlayerWeeklyRegistry extends JPAStarPlayerRegistry {
+@Table(name = "star_week_players")
+public class JPAStarWeekPlayer extends JPAStarPlayer {
     
     private int week;
     private int trophies;

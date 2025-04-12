@@ -1,6 +1,6 @@
 package com.pablosgon.mortismaycry.webapi.entities.models;
 
-public class StarMasterRegistry extends StarPlayerRegistry {
+public class StarMaster extends StarPlayer {
     
     private int rankedPoints;
 

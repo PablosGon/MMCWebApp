@@ -9,9 +9,14 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.entities.models.ClubMember;
 import com.pablosgon.mortismaycry.webapi.entities.models.Player;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
+
 
 @Configuration
 public class MapperConfig {
@@ -37,6 +42,18 @@ public class MapperConfig {
                 m.map(src -> src.getSeasonTrophyProgress(), Player::setSeasonTrophyProgress);
             });
 
+        mapper.typeMap(JPAStarPlayer.class, StarPlayer.class)
+            .addMappings(m -> {
+                m.map(src -> src.getSeason().getId(), StarPlayer::setSeason);
+                m.map(src -> src.getPlayer().getTag(), StarPlayer::setPlayer);
+            });
+
+        mapper.typeMap(JPAStarWeekPlayer.class, StarWeekPlayer.class)
+            .addMappings(m -> {
+                m.map(src -> src.getSeason().getId(), StarPlayer::setSeason);
+                m.map(src -> src.getPlayer().getTag(), StarPlayer::setPlayer);
+            });
+
         return mapper;
     }
 
@@ -46,4 +63,5 @@ public class MapperConfig {
         objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
         return objectMapper;
     }
+
 }
