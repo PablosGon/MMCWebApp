@@ -2,33 +2,42 @@ package com.pablosgon.mortismaycry.webapi.entities.models;
 
 public class StarPlayer {
 
-    private String player;
-    private int season;
-    private int clubId;
+    private String playerTag;
+    private int seasonId;
+    private String name;
+    private int profileIconId;
 
     
-    public String getPlayer() {
-        return this.player;
+    public String getPlayerTag() {
+        return this.playerTag;
     }
 
-    public void setPlayer(String player) {
-        this.player = player;
+    public void setPlayerTag(String player) {
+        this.playerTag = player;
     }
 
-    public int getSeason() {
-        return this.season;
+    public int getSeasonId() {
+        return this.seasonId;
     }
 
-    public void setSeason(int season) {
-        this.season = season;
+    public void setSeasonId(int season) {
+        this.seasonId = season;
     }
 
-    public int getClubId() {
-        return this.clubId;
+    public String getName() {
+        return this.name;
     }
 
-    public void setClubId(int clubId) {
-        this.clubId = clubId;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getProfileIconId() {
+        return this.profileIconId;
+    }
+
+    public void setProfileIconId(int profileIconId) {
+        this.profileIconId = profileIconId;
     }
 
 }

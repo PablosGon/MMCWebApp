@@ -58,7 +58,7 @@ export default function ClubPage() {
     )
   } else {
     return (
-      <div className="bg">
+      <div>
         <Link href="/" className="text-lg">← Volver</Link>
         <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
             <Image src={"https://cdn.brawlify.com/club-badges/regular/" + club?.badgeId + ".png"} alt="Club Badge" width={500} height={500} className="w-50"/>

@@ -1,15 +1,15 @@
 package com.pablosgon.mortismaycry.webapi.entities.models;
 
-import java.util.List;
+import com.pablosgon.mortismaycry.webapi.constants.ClubConstants;
 
 public class Season {
     
     private int id;
-    private List<StarWeekPlayer> starPlayers;
-    private StarSeasonPlayer grandStarPlayer;
-    private StarLegend starLegend;
-    private StarMaster starMaster;
+    private ClubSeasonStarRegistry[] starPlayersByClub;
 
+    public Season() {
+        initializeClubSeasonStarRegistries();
+    }
 
     public int getId() {
         return this.id;
@@ -19,36 +19,23 @@ public class Season {
         this.id = id;
     }
 
-    public List<StarWeekPlayer> getStarPlayers() {
-        return this.starPlayers;
+    public ClubSeasonStarRegistry[] getStarPlayersByClub() {
+        return this.starPlayersByClub;
     }
 
-    public void setStarPlayers(List<StarWeekPlayer> starPlayers) {
-        this.starPlayers = starPlayers;
+    public void setStarPlayersByClub(ClubSeasonStarRegistry[] clubSeasonStarRegistries) {
+        this.starPlayersByClub = clubSeasonStarRegistries;
     }
 
-    public StarSeasonPlayer getGrandStarPlayer() {
-        return this.grandStarPlayer;
+    //#region Private Methods
+
+    private void initializeClubSeasonStarRegistries() {
+        starPlayersByClub = new ClubSeasonStarRegistry[ClubConstants.CLUB_IDS.length];
+        for (int i = 0; i < starPlayersByClub.length; i++) {
+            starPlayersByClub[i] = new ClubSeasonStarRegistry();
+        }
     }
 
-    public void setGrandStarPlayer(StarSeasonPlayer grandStarPlayer) {
-        this.grandStarPlayer = grandStarPlayer;
-    }
-
-    public StarLegend getStarLegend() {
-        return this.starLegend;
-    }
-
-    public void setStarLegend(StarLegend starLegend) {
-        this.starLegend = starLegend;
-    }
-
-    public StarMaster getStarMaster() {
-        return this.starMaster;
-    }
-
-    public void setStarMaster(StarMaster starMaster) {
-        this.starMaster = starMaster;
-    }
+    //#endregion
 
 }

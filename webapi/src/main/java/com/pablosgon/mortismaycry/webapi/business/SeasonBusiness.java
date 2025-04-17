@@ -6,6 +6,6 @@ import com.pablosgon.mortismaycry.webapi.entities.models.Season;
 
 public interface SeasonBusiness {
     
-    public List<Season> getSeasons();
+    public List<Season> getSeasons() throws Exception;
 
 }

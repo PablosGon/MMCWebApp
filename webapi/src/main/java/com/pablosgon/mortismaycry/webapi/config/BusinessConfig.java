@@ -25,8 +25,8 @@ public class BusinessConfig {
     }
 
     @Bean
-    SeasonBusiness seasonBusiness(ModelMapper mapper, SeasonRepository seasonRepository) {
-        return new SeasonBusinessImpl(mapper, seasonRepository);
+    SeasonBusiness seasonBusiness(ModelMapper mapper, SeasonRepository seasonRepository, BSClient client, ObjectMapper objectMapper) {
+        return new SeasonBusinessImpl(mapper, seasonRepository, client, objectMapper);
     }
 
 }
