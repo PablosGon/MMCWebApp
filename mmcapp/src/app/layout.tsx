@@ -30,7 +30,7 @@ export default function RootLayout({
         <div className="bg-[url('../../public/background.png')] bg-cover bg-center h-screen">
           <div className="bg-gradient-to-t from-gray-950 from-10% to-transparent to-60% h-screen">
             <Header/>
-            <main className="container max-w-400 mx-auto pt-30 p-5">
+            <main className="container max-w-300 mx-auto pt-20 p-5">
               {children}
             </main>
           </div>

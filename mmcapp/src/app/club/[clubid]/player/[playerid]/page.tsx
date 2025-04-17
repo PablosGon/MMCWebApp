@@ -45,9 +45,9 @@ export default function PlayerPage() {
                 <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
                     <Image src={"https://cdn.brawlify.com/profile-icons/regular/" + player.iconId + ".png"} alt={`Player icon`} width={500} height={500} className="w-50"/>
                     <div>
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-7xl">{player.name}</h1>
-                        <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl xl:text4xl">{player.trophies} trofeos</h2>
-                        <p className="text-lg sm:text-md md:text-lg lg:text-xl xl:text-2xl">{player.clubName}</p>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl">{player.name}</h1>
+                        <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl">{player.trophies} trofeos</h2>
+                        <p className="text-lg sm:text-md md:text-lg lg:text-xl">{player.clubName}</p>
                     </div>
                 </header>
                 <div className="container flex flex-wrap gap-5">

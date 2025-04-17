@@ -7,15 +7,15 @@ export default function ClubMemberItem(params: { member: ClubMember, index:numbe
     const index = params.index;
 
     return (
-        <div className="flex flex-row items-center gap-5">
+        <div className="flex flex-row items-center gap-3">
             <div className="text-2xl w-5">
                 {index + 1}
             </div>
             <Image src={"https://cdn.brawlify.com/profile-icons/regular/" + member.iconId + ".png"} alt={member.name} width={100} height={100} className="w-20"/>
             <div>
-                <h2 className="text-lg lg:text-2xl">{member.name}</h2>
-                <p className="text-md">{member.role}</p>
-                <p className="text-md">🏆{member.trophies}
+                <h2 className="text-md lg:text-lg">{member.name}</h2>
+                <p className="text-sm lg:text-md">{member.role}</p>
+                <p className="text-sm lg:text-md">🏆{member.trophies}
                     {
                         member.lastRegistry >= 0 ? 
                             <span className="text-amber-400 ml-1">(+{member.lastRegistry})</span>
