@@ -9,14 +9,15 @@ import com.pablosgon.mortismaycry.webapi.business.*;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
+import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 
 @Configuration
 public class BusinessConfig {
     
     @Bean
-    ClubBusiness clubBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, TrophyRegistryRepository trophyRegistryRepository, PlayerRepository playerRepository) {
-        return new ClubBusinessImpl(client, mapper, objectMapper, trophyRegistryRepository, playerRepository);
+    ClubBusiness clubBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, TrophyRegistryRepository trophyRegistryRepository, PlayerRepository playerRepository, StarPlayerRepository starPlayerRepository) {
+        return new ClubBusinessImpl(client, mapper, objectMapper, trophyRegistryRepository, playerRepository, starPlayerRepository);
     }
 
     @Bean

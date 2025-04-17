@@ -1,5 +1,6 @@
 import { ClubMember } from "@/models/club-member.model";
 import Image from "next/image";
+import { ClubMemberBadges } from "./club-member-badges.component";
 
 export default function ClubMemberItem(params: { member: ClubMember, index:number }) {
 
@@ -23,6 +24,7 @@ export default function ClubMemberItem(params: { member: ClubMember, index:numbe
                             <span className="text-teal-300 ml-1">NEW</span> 
                     } 
                 </p>
+                <ClubMemberBadges starBadgeCase={member.starBadgeCase} />
             </div>
             <p className="ml-auto">→</p>
         </div>

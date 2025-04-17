@@ -11,12 +11,23 @@ import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 import com.pablosgon.mortismaycry.webapi.constants.ClubConstants;
 import com.pablosgon.mortismaycry.webapi.entities.models.Club;
 import com.pablosgon.mortismaycry.webapi.entities.models.ClubMember;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarBadgeCase;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarLegend;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarMaster;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarSeasonPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClub;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarLegend;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarMaster;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPATrophyRegistry;
 import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
+import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 
 public class ClubBusinessImpl implements ClubBusiness {
@@ -26,19 +37,22 @@ public class ClubBusinessImpl implements ClubBusiness {
     private ObjectMapper objectMapper;
     private TrophyRegistryRepository trophyRegistryRepository;
     private PlayerRepository playerRepository;
+    private StarPlayerRepository starPlayerRepository;
 
     public ClubBusinessImpl(
         BSClient bsClient,
         ModelMapper mapper,
         ObjectMapper objectMapper,
         TrophyRegistryRepository trophyRegistryRepository,
-        PlayerRepository playerRepository
+        PlayerRepository playerRepository,
+        StarPlayerRepository starPlayerRepository
     ) {
         this.client = bsClient;
         this.mapper = mapper;
         this.objectMapper = objectMapper;
         this.trophyRegistryRepository = trophyRegistryRepository;
         this.playerRepository = playerRepository;
+        this.starPlayerRepository = starPlayerRepository;
     }
 
     @Override
@@ -56,6 +70,7 @@ public class ClubBusinessImpl implements ClubBusiness {
             BSClub bsClub = objectMapper.readValue(response.body(), BSClub.class);
             club = mapper.map(bsClub, Club.class);
             mapRegistriesToMembers(club.getMembers());
+            mapStarBadgesToMembers(club.getMembers());
             System.out.println("Get Club successful: " + response.body());
         } catch (Exception e){
             System.out.println(e);
@@ -100,6 +115,35 @@ public class ClubBusinessImpl implements ClubBusiness {
             }    
         }
         clubMember.setLastRegistry(lastRegistry);
+    }
+
+    private void mapStarBadgesToMembers(List<ClubMember> members) {
+        List<JPAStarPlayer> starPlayers = starPlayerRepository.findAll();
+        for (ClubMember clubMember : members) {
+            List<JPAStarPlayer> memberStarBadges = starPlayers.stream().filter(x -> x.getPlayer().getTag().equals(clubMember.getTag().replace("#", ""))).toList();
+            mapStarBadgesCount(clubMember, memberStarBadges);
+        }
+    }
+
+    private void mapStarBadgesCount(ClubMember member, List<JPAStarPlayer> badges) {
+        int weeklyBadges = 0;
+        int grandBadges = 0;
+        int legendBadges = 0;
+        int masterBadges = 0;
+
+        for (JPAStarPlayer jpaStarPlayer : badges) {
+            if (jpaStarPlayer instanceof JPAStarWeekPlayer) {
+                weeklyBadges++;
+            } else if (jpaStarPlayer instanceof JPAStarSeasonPlayer) {
+                grandBadges++;
+            } else if (jpaStarPlayer instanceof JPAStarLegend) {
+                legendBadges++;
+            } else if (jpaStarPlayer instanceof JPAStarMaster) {
+                masterBadges++;
+            }
+        }
+
+        member.setStarBadgeCase(new StarBadgeCase(weeklyBadges, grandBadges, legendBadges, masterBadges));
     }
 
     private boolean invalidUpdateMembersRequest(UpdateMembersRequest request) {

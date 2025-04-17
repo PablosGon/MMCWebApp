@@ -8,8 +8,9 @@ public class ClubMember {
     private int trophies;
     private String role;
     private String nameColor;
-
     private int lastRegistry;
+    private StarBadgeCase starBadgeCase;
+
 
     public int getIconId() {
         return this.iconId;
@@ -65,6 +66,14 @@ public class ClubMember {
 
     public void setLastRegistry(int lastRegistry) {
         this.lastRegistry = lastRegistry;
+    }
+
+    public StarBadgeCase getStarBadgeCase() {
+        return this.starBadgeCase;
+    }
+
+    public void setStarBadgeCase(StarBadgeCase starBadgeCase) {
+        this.starBadgeCase = starBadgeCase;
     }
 
 }
