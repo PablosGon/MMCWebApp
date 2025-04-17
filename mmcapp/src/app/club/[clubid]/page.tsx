@@ -68,10 +68,10 @@ export default function ClubPage() {
             </div>
         </header>
         <section className="container mt-10">
-          <header className="flex">
+          <header className="flex items-center">
             <h2 className="text-2xl md:text5xl">Miembros</h2>
-            <label className="ml-auto">
-              Ordernar por
+            <label className="ml-auto text-end">
+            ⇅
               <select onChange={(e) => setSortBy(Number(e.target.value) as ClubMembersOrderBy)} value={sortBy}>
                 <option value={ClubMembersOrderBy.Trophies}>Trofeos</option>
                 <option value={ClubMembersOrderBy.LastWeek}>Última semana</option>
