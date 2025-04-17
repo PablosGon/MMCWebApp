@@ -11,7 +11,7 @@ export default function Home() {
           ¡Bienvenido a la web de Mortis May Cry!
         </h1>
         <p className="text-sm text-center">
-          Esta aplicación aún está en desarrollo, por lo que posible que puedas encontrar errores, pero se irán corrigiendo lo antes posible. ¡Más funciones están en camino!
+        ¡Más funciones están en camino! Esta aplicación aún está en desarrollo, por lo que es posible que puedas encontrar errores, en cuyo caso agradecemos que los reportes al líder del club para poder solucionarlos lo antes posible. ¡Muchas gracias!
         </p>
       </header>
 
