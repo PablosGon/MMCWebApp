@@ -24,11 +24,11 @@ export function PlayerAchievementsComponent(params: { badges: StarBadgeCase }) {
                     openIndex === 1 &&
                         <div>
                             <p className="text-sm">El título de Gran Estelar se otorga al jugador que más trofeos ha subido a lo largo de una temporada.</p>
-                            <ul>
+                            <ul className="flex flex-row flex-wrap justify-center flex-1">
                                 {
                                     badges.grandStarPlayerBadges.map((badge, index) => (
-                                        <li key={index}>
-                                            <Image src="/star_players/grand_star_players.png" height={150} width={150} alt="Gran estelar"/>
+                                        <li key={index} className="flex flex-col items-center flex-1">
+                                            <Image src="/star_players/grand_star_player.png" height={100} width={100} alt="Gran estelar"/>
                                             <p className="text-xl">
                                                 Temporada {badge.seasonId}
                                             </p>
