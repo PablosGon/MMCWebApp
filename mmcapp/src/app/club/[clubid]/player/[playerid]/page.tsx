@@ -1,4 +1,5 @@
 "use client"
+import { PlayerAchievementsComponent } from "@/components/player/player-achievements.component";
 import { TrophyChart } from "@/components/player/trophy-chart.component";
 import ErrorComponent from "@/components/shared/error.component";
 import LoadingComponent from "@/components/shared/loading.component";
@@ -52,8 +53,12 @@ export default function PlayerPage() {
                 </header>
                 <div className="container flex flex-wrap gap-5">
                     <section className="container bg-gray-800 p-10 rounded-4xl justify-items-center lg:justify-start mt-5 flex-1/4">
-                        <h2 className="text-2xl sm:text-2xl md:text-3xl">Progreso de temporada</h2>
+                        <h2 className="text-2xl sm:text-2xl md:text-3xl text-center">Progreso de temporada</h2>
                         <TrophyChart player={player}/>
+                    </section>
+                    <section className="container bg-gray-800 p-10 rounded-4xl justify-items-center lg:justify-start mt-5 flex-1/4">
+                        <h2 className="text-2xl sm:text-2xl md:text-3xl text-center">Logros</h2>
+                        <PlayerAchievementsComponent badges={player.badges} />
                     </section>
                 </div>
                 

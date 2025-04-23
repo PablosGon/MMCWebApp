@@ -118,7 +118,7 @@ public class SeasonBusinessImpl implements SeasonBusiness {
             starPlayer.setProfileIconId(member.get().getIcon().getId());
         } else {
             starPlayer.setName(starPlayer.getPlayerTag());
-            starPlayer.setProfileIconId(1);
+            starPlayer.setProfileIconId(-1);
         }
     }
 

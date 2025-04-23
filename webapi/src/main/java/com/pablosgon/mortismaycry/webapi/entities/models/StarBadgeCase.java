@@ -1,19 +1,21 @@
 package com.pablosgon.mortismaycry.webapi.entities.models;
 
+import java.util.List;
+
 public class StarBadgeCase {
     
-    private int starPlayerBadges;
-    private int grandStarPlayerBadges;
-    private int starLegendBadges;
-    private int starMasterBadges;
+    private List<StarWeekPlayer> starPlayerBadges;
+    private List<StarSeasonPlayer> grandStarPlayerBadges;
+    private List<StarLegend> starLegendBadges;
+    private List<StarMaster> starMasterBadges;
 
     public StarBadgeCase() { }
 
     public StarBadgeCase(
-        int starPlayerBadges,
-        int grandStarPlayerBadges,
-        int starLegendBadges,
-        int starMasterBadges
+        List<StarWeekPlayer> starPlayerBadges,
+        List<StarSeasonPlayer> grandStarPlayerBadges,
+        List<StarLegend> starLegendBadges,
+        List<StarMaster> starMasterBadges
     ) {
         this.starPlayerBadges = starPlayerBadges;
         this.grandStarPlayerBadges = grandStarPlayerBadges;
@@ -21,35 +23,35 @@ public class StarBadgeCase {
         this.starMasterBadges = starMasterBadges;
     }
 
-    public int getStarPlayerBadges() {
+    public List<StarWeekPlayer> getStarPlayerBadges() {
         return this.starPlayerBadges;
     }
 
-    public void setStarPlayerBadges(int starPlayerBadges) {
+    public void setStarPlayerBadges(List<StarWeekPlayer> starPlayerBadges) {
         this.starPlayerBadges = starPlayerBadges;
     }
 
-    public int getGrandStarPlayerBadges() {
+    public List<StarSeasonPlayer> getGrandStarPlayerBadges() {
         return this.grandStarPlayerBadges;
     }
 
-    public void setGrandStarPlayerBadges(int grandStarPlayerBadges) {
+    public void setGrandStarPlayerBadges(List<StarSeasonPlayer> grandStarPlayerBadges) {
         this.grandStarPlayerBadges = grandStarPlayerBadges;
     }
 
-    public int getStarLegendBadges() {
+    public List<StarLegend> getStarLegendBadges() {
         return this.starLegendBadges;
     }
 
-    public void setStarLegendBadges(int starLegendBadges) {
+    public void setStarLegendBadges(List<StarLegend> starLegendBadges) {
         this.starLegendBadges = starLegendBadges;
     }
 
-    public int getStarMasterBadges() {
+    public List<StarMaster> getStarMasterBadges() {
         return this.starMasterBadges;
     }
 
-    public void setStarMasterBadges(int starMasterBadges) {
+    public void setStarMasterBadges(List<StarMaster> starMasterBadges) {
         this.starMasterBadges = starMasterBadges;
     }
 

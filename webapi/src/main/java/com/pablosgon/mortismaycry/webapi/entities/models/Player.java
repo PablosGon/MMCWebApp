@@ -16,6 +16,7 @@ public class Player {
 
     private List<TrophyRegistry> trophyRegistries = new ArrayList<>();
     private List<Integer> seasonTrophyProgress = new ArrayList<>();
+    private StarBadgeCase badges;
 
     public String getTag() {
         return this.tag;
@@ -95,6 +96,14 @@ public class Player {
 
     public void setSeasonTrophyProgress(List<Integer> seasonTrophyProgress) {
         this.seasonTrophyProgress = seasonTrophyProgress;
+    }
+
+    public StarBadgeCase getBadges() {
+        return this.badges;
+    }
+
+    public void setBadges(StarBadgeCase badges) {
+        this.badges = badges;
     }
 
 }

@@ -21,8 +21,8 @@ public class BusinessConfig {
     }
 
     @Bean
-    PlayerBusiness playerBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, PlayerRepository playerRepository) {
-        return new PlayerBusinessImpl(client, mapper, objectMapper, playerRepository);
+    PlayerBusiness playerBusiness(BSClient client, ModelMapper mapper, ObjectMapper objectMapper, PlayerRepository playerRepository, StarPlayerRepository starPlayerRepository) {
+        return new PlayerBusinessImpl(client, mapper, objectMapper, playerRepository, starPlayerRepository);
     }
 
     @Bean

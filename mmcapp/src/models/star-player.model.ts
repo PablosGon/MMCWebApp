@@ -1,6 +1,6 @@
 export interface StarPlayer {
     playerTag: string,
-    season: number,
+    seasonId: number,
     name: string,
     profileIconId: number,
 }

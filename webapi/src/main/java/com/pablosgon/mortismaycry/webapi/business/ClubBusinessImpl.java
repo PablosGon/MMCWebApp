@@ -33,7 +33,7 @@ import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 public class ClubBusinessImpl implements ClubBusiness {
     
     private BSClient client;
-    private ModelMapper mapper;
+    private ModelMapper modelMapper;
     private ObjectMapper objectMapper;
     private TrophyRegistryRepository trophyRegistryRepository;
     private PlayerRepository playerRepository;
@@ -41,14 +41,14 @@ public class ClubBusinessImpl implements ClubBusiness {
 
     public ClubBusinessImpl(
         BSClient bsClient,
-        ModelMapper mapper,
+        ModelMapper modelMapper,
         ObjectMapper objectMapper,
         TrophyRegistryRepository trophyRegistryRepository,
         PlayerRepository playerRepository,
         StarPlayerRepository starPlayerRepository
     ) {
         this.client = bsClient;
-        this.mapper = mapper;
+        this.modelMapper = modelMapper;
         this.objectMapper = objectMapper;
         this.trophyRegistryRepository = trophyRegistryRepository;
         this.playerRepository = playerRepository;
@@ -68,7 +68,7 @@ public class ClubBusinessImpl implements ClubBusiness {
         try {
             HttpResponse<String> response = client.getClub(tag);
             BSClub bsClub = objectMapper.readValue(response.body(), BSClub.class);
-            club = mapper.map(bsClub, Club.class);
+            club = modelMapper.map(bsClub, Club.class);
             mapRegistriesToMembers(club.getMembers());
             mapStarBadgesToMembers(club.getMembers());
             System.out.println("Get Club successful: " + response.body());
@@ -121,25 +121,25 @@ public class ClubBusinessImpl implements ClubBusiness {
         List<JPAStarPlayer> starPlayers = starPlayerRepository.findAll();
         for (ClubMember clubMember : members) {
             List<JPAStarPlayer> memberStarBadges = starPlayers.stream().filter(x -> x.getPlayer().getTag().equals(clubMember.getTag().replace("#", ""))).toList();
-            mapStarBadgesCount(clubMember, memberStarBadges);
+            mapStarBadges(clubMember, memberStarBadges);
         }
     }
 
-    private void mapStarBadgesCount(ClubMember member, List<JPAStarPlayer> badges) {
-        int weeklyBadges = 0;
-        int grandBadges = 0;
-        int legendBadges = 0;
-        int masterBadges = 0;
+    private void mapStarBadges(ClubMember member, List<JPAStarPlayer> badges) {
+        List<StarWeekPlayer> weeklyBadges = new ArrayList<>();
+        List<StarSeasonPlayer> grandBadges = new ArrayList<>();
+        List<StarLegend> legendBadges = new ArrayList<>();
+        List<StarMaster> masterBadges = new ArrayList<>();
 
         for (JPAStarPlayer jpaStarPlayer : badges) {
             if (jpaStarPlayer instanceof JPAStarWeekPlayer) {
-                weeklyBadges++;
+                weeklyBadges.add(modelMapper.map(jpaStarPlayer, StarWeekPlayer.class));
             } else if (jpaStarPlayer instanceof JPAStarSeasonPlayer) {
-                grandBadges++;
+                grandBadges.add(modelMapper.map(jpaStarPlayer, StarSeasonPlayer.class));
             } else if (jpaStarPlayer instanceof JPAStarLegend) {
-                legendBadges++;
+                legendBadges.add(modelMapper.map(jpaStarPlayer, StarLegend.class));
             } else if (jpaStarPlayer instanceof JPAStarMaster) {
-                masterBadges++;
+                masterBadges.add(modelMapper.map(jpaStarPlayer, StarMaster.class));
             }
         }
 
