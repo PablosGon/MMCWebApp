@@ -22,7 +22,7 @@ export default function Home() {
         <ul className="flex flex-wrap flex-col lg:flex-row gap-3 justify-center">
           {
             CLUBS.map((club, index) => (
-              <li key={index} className="flex-1">
+              <li key={club.id} className="flex-1">
                 <Link href={"/club/" + index}>
                   <div className="h-20 bg-gray-800 rounded-2xl text-center flex flex-row gap-2 flex-wrap pl-3 pr-3 items-center">
                     <Image src={"/clubs/" + index + ".png"} alt={club.name} width={100} height={100} />

@@ -2,7 +2,7 @@ import { ClubMember } from "@/models/club-member.model";
 import Image from "next/image";
 import { ClubMemberBadges } from "./club-member-badges.component";
 
-export default function ClubMemberItem(params: { member: ClubMember, index:number }) {
+export default function ClubMemberItem(params: Readonly<{ member: ClubMember, index:number }>) {
 
     const member = params.member;
     const index = params.index;

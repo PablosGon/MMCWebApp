@@ -1,7 +1,7 @@
 import { StarBadgeCase } from "@/models/star-badge-case.model";
 import Image from "next/image";
 
-export function ClubMemberBadges(params: {starBadgeCase: StarBadgeCase}) {
+export function ClubMemberBadges(params: Readonly<{starBadgeCase: StarBadgeCase}>) {
 
     const badges = params.starBadgeCase;
 

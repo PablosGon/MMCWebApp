@@ -2,7 +2,7 @@ import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubStarPlayerRegistry } from "@/models/club-star-player-registry.model";
 import Image from "next/image";
 
-export function ClubStarBoardComponent(params: {club: ClubStarPlayerRegistry, index: number}) {
+export function ClubStarBoardComponent(params: Readonly<{club: ClubStarPlayerRegistry, index: number}>) {
 
     const club = params.club;
     const index = params.index;
