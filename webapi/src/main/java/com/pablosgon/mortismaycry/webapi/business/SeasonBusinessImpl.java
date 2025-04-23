@@ -25,6 +25,7 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarMaster;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.requests.CreateSeasonRequest;
 import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 
 public class SeasonBusinessImpl implements SeasonBusiness {
@@ -69,6 +70,12 @@ public class SeasonBusinessImpl implements SeasonBusiness {
         }
 
         return seasons;
+    }
+
+    @Override
+    public void createSeason(CreateSeasonRequest request) {
+        JPASeason newSeason = new JPASeason(request.getId());
+        seasonRepository.save(newSeason);
     }
     
     //#region Private Methods

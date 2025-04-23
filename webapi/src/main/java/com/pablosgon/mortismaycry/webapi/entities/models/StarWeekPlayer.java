@@ -5,7 +5,6 @@ public class StarWeekPlayer extends StarPlayer {
     private int week;
     private int trophies;
 
-
     public int getWeek() {
         return this.week;
     }

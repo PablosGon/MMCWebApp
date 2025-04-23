@@ -12,6 +12,15 @@ public class JPAStarWeekPlayer extends JPAStarPlayer {
     private int week;
     private int trophies;
 
+    public JPAStarWeekPlayer() {
+        super();
+    }
+
+    public JPAStarWeekPlayer(JPAPlayer player, JPASeason season, int week, int trophies, int clubId) {
+        super(player, season, clubId);
+        this.week = week;
+        this.trophies = trophies;
+    }
 
     public int getWeek() {
         return this.week;

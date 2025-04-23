@@ -17,6 +17,13 @@ public class JPASeason {
     @OneToMany(mappedBy = "season")
     private List<JPAStarPlayer> starPlayers;
 
+    public JPASeason() {
+        super();
+    }
+
+    public JPASeason(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return this.id;

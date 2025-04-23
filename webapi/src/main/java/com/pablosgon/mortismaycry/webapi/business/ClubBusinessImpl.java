@@ -19,6 +19,7 @@ import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClub;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPASeason;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarLegend;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarMaster;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
@@ -27,6 +28,7 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPATrophyRegistry;
 import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
+import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 
@@ -38,6 +40,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     private TrophyRegistryRepository trophyRegistryRepository;
     private PlayerRepository playerRepository;
     private StarPlayerRepository starPlayerRepository;
+    private SeasonRepository seasonRepository;
 
     public ClubBusinessImpl(
         BSClient bsClient,
@@ -45,7 +48,8 @@ public class ClubBusinessImpl implements ClubBusiness {
         ObjectMapper objectMapper,
         TrophyRegistryRepository trophyRegistryRepository,
         PlayerRepository playerRepository,
-        StarPlayerRepository starPlayerRepository
+        StarPlayerRepository starPlayerRepository,
+        SeasonRepository seasonRepository
     ) {
         this.client = bsClient;
         this.modelMapper = modelMapper;
@@ -53,6 +57,7 @@ public class ClubBusinessImpl implements ClubBusiness {
         this.trophyRegistryRepository = trophyRegistryRepository;
         this.playerRepository = playerRepository;
         this.starPlayerRepository = starPlayerRepository;
+        this.seasonRepository = seasonRepository;
     }
 
     @Override
@@ -69,7 +74,7 @@ public class ClubBusinessImpl implements ClubBusiness {
             HttpResponse<String> response = client.getClub(tag);
             BSClub bsClub = objectMapper.readValue(response.body(), BSClub.class);
             club = modelMapper.map(bsClub, Club.class);
-            mapRegistriesToMembers(club.getMembers());
+            mapLastRegistriesToMembers(club.getMembers());
             mapStarBadgesToMembers(club.getMembers());
             System.out.println("Get Club successful: " + response.body());
         } catch (Exception e){
@@ -86,10 +91,14 @@ public class ClubBusinessImpl implements ClubBusiness {
         }
 
         try {
-            List<BSClubMember> bsClubMembers = allCurrentMembers();
-            addAllUnregisteredPlayers(bsClubMembers);
-            List<JPATrophyRegistry> newRegistries = trophyRegistriesFromMembers(bsClubMembers, request.getSeason(), request.getWeek());
-            trophyRegistryRepository.saveAll(newRegistries);
+            for (int i = 0; i < ClubConstants.CLUB_IDS.length; i++) {
+                List<ClubMember> members = allCurrentMembersFromClub(ClubConstants.CLUB_IDS[i]);
+                addAllUnregisteredPlayers(members);
+                List<JPATrophyRegistry> newRegistries = trophyRegistriesFromMembers(members, request.getSeason(), request.getWeek());
+                trophyRegistryRepository.saveAll(newRegistries);
+                createWeeklyStarPlayers(members, i, request.getSeason(), request.getWeek());
+            }
+
         } catch (Exception e) {
             throw e;
         }
@@ -97,15 +106,27 @@ public class ClubBusinessImpl implements ClubBusiness {
 
     //#region Private methods
 
-    private void mapRegistriesToMembers(List<ClubMember> members) {
+    private void createWeeklyStarPlayers(List<ClubMember> members, int clubIndex, int season, int week) {
+        mapLastRegistriesToMembers(members);
+        members.sort((m1, m2) -> m2.getLastRegistry() - m1.getLastRegistry());
+        ClubMember clubMemberWithMostProgression = members.getFirst();
+
+        JPAPlayer playerWithMostProgression = playerRepository.findPlayerByTag(clubMemberWithMostProgression.getTag().replace("#", ""));
+        JPASeason jpaSeason = seasonRepository.findById(season).orElse(null);
+
+        JPAStarWeekPlayer newStarPlayer = new JPAStarWeekPlayer(playerWithMostProgression, jpaSeason, week, clubMemberWithMostProgression.getLastRegistry(), clubIndex);
+        starPlayerRepository.save(newStarPlayer);
+    }
+
+    private void mapLastRegistriesToMembers(List<ClubMember> members) {
         List<JPATrophyRegistry> trophyRegistries = trophyRegistryRepository.findAllSorted();
         for (ClubMember clubMember : members) {
             List<JPATrophyRegistry> memberRegistries = trophyRegistries.stream().filter(x -> x.getPlayer().getTag().equals(clubMember.getTag().replace("#", ""))).toList();
-            setLastRegistry(clubMember, memberRegistries);
+            mapLastRegistry(clubMember, memberRegistries);
         }
     }
 
-    private void setLastRegistry(ClubMember clubMember, List<JPATrophyRegistry> memberRegistries) {
+    private void mapLastRegistry(ClubMember clubMember, List<JPATrophyRegistry> memberRegistries) {
         int lastRegistry = -1;
 
         if (!memberRegistries.isEmpty()) {
@@ -157,11 +178,11 @@ public class ClubBusinessImpl implements ClubBusiness {
         return !registries.isEmpty();
     }
 
-    private void addAllUnregisteredPlayers(List<BSClubMember> currentMembers) throws Exception {
+    private void addAllUnregisteredPlayers(List<ClubMember> currentMembers) throws Exception {
         List<String> registeredPlayerTags = playerRepository.findAll().stream().map(x -> x.getTag()).toList();
-        List<BSClubMember> unregisteredMembers = currentMembers.stream().filter(x -> !registeredPlayerTags.contains(x.getTag().replace("#", ""))).toList();
+        List<ClubMember> unregisteredMembers = currentMembers.stream().filter(x -> !registeredPlayerTags.contains(x.getTag().replace("#", ""))).toList();
 
-        for (BSClubMember member : unregisteredMembers) {
+        for (ClubMember member : unregisteredMembers) {
             String tag = member.getTag().replace("#", "");
             System.out.println("Creating player: " + tag);
             JPAPlayer newPlayer = new JPAPlayer();
@@ -171,24 +192,23 @@ public class ClubBusinessImpl implements ClubBusiness {
         }
     }
 
-    private List<BSClubMember> allCurrentMembers() throws Exception {
-        List<BSClubMember> members = new ArrayList<>();
-        String[] clubTags = ClubConstants.CLUB_IDS;
-        for (String tag : clubTags) {
-            HttpResponse<String> response = client.getClub(tag);
-            BSClub club = objectMapper.readValue(response.body(), BSClub.class);
-            for (BSClubMember member : club.getMembers()) {
-                members.add(member);
-            }
+    private List<ClubMember> allCurrentMembersFromClub(String tag) throws Exception {
+        List<ClubMember> members = new ArrayList<>();
+
+        HttpResponse<String> response = client.getClub(tag);
+        BSClub club = objectMapper.readValue(response.body(), BSClub.class);
+        for (BSClubMember member : club.getMembers()) {
+            members.add(modelMapper.map(member, ClubMember.class));
         }
+        
 
         return members;
     }
 
-    private List<JPATrophyRegistry> trophyRegistriesFromMembers(List<BSClubMember> members, int season, int week) {
+    private List<JPATrophyRegistry> trophyRegistriesFromMembers(List<ClubMember> members, int season, int week) {
         List<JPATrophyRegistry> registries = new ArrayList<>();
 
-        for (BSClubMember member : members) {
+        for (ClubMember member : members) {
             JPATrophyRegistry newRegistry = new JPATrophyRegistry(member.getTrophies(), season, week, new JPAPlayer(member.getTag().replace("#", "")));
             registries.add(newRegistry);
         }

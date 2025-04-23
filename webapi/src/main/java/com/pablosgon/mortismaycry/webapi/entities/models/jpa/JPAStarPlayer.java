@@ -31,6 +31,15 @@ public class JPAStarPlayer {
 
     private int clubId;
 
+    public JPAStarPlayer() {
+        super();
+    }
+
+    public JPAStarPlayer(JPAPlayer player, JPASeason season, int clubId) {
+        this.player = player;
+        this.season = season;
+        this.clubId = clubId;
+    }
 
     public int getId() {
         return this.id;

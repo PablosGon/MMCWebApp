@@ -6,7 +6,6 @@ public class StarPlayer {
     private int seasonId;
     private String name;
     private int profileIconId;
-
     
     public String getPlayerTag() {
         return this.playerTag;
