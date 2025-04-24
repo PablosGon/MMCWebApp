@@ -1,7 +1,8 @@
 import { Season } from "@/models/season.model";
 import { ClubStarBoardComponent } from "./club-star-board.component";
+import { CLUBS } from "@/constants/clubs-names.constant";
 
-export function SeasonStarBoardComponent(params: {season: Season}) {
+export function SeasonStarBoardComponent(params: Readonly<{season: Season}>) {
 
     const season = params.season;
 
@@ -15,7 +16,7 @@ export function SeasonStarBoardComponent(params: {season: Season}) {
             <ul className="flex flex-col gap-5">
                 {
                     season.starPlayersByClub.map((club, index) => (
-                        <li key={index}>
+                        <li key={CLUBS[index].id}>
                             <ClubStarBoardComponent club={club} index={index}/>
                         </li>
                     ))

@@ -1,9 +1,8 @@
 import { Player } from "@/models/player.model";
-import { Chart, LogarithmicScale } from "chart.js";
-import { CategoryScale, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from "chart.js";
+import { Chart, LogarithmicScale, CategoryScale, Legend, LinearScale, LineElement, PointElement, Title, Tooltip } from "chart.js";
 import { Line } from "react-chartjs-2";
 
-export function TrophyChart(params:{player:Player}) {
+export function TrophyChart(params:Readonly<{player:Player}>) {
      
     Chart.register(
         CategoryScale,

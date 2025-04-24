@@ -2,7 +2,7 @@ import { StarBadgeCase } from "@/models/star-badge-case.model";
 import Image from "next/image";
 import { useState } from "react";
 
-export function PlayerAchievementsComponent(params: { badges: StarBadgeCase }) {
+export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadgeCase }>) {
 
     const badges = params.badges;
 
@@ -26,8 +26,8 @@ export function PlayerAchievementsComponent(params: { badges: StarBadgeCase }) {
                             <p className="text-sm">El título de Gran Estelar se otorga al jugador que más trofeos ha subido a lo largo de una temporada.</p>
                             <ul className="flex flex-row flex-wrap justify-center flex-1 gap-2">
                                 {
-                                    badges.grandStarPlayerBadges.map((badge, index) => (
-                                        <li key={index} className="flex flex-col items-center flex-1">
+                                    badges.grandStarPlayerBadges.map((badge) => (
+                                        <li key={badge.seasonId} className="flex flex-col items-center flex-1">
                                             <Image src="/star_players/grand_star_player.png" height={100} width={100} alt="Gran estelar"/>
                                             <p className="text-md">
                                                 Temporada {badge.seasonId}
@@ -55,8 +55,8 @@ export function PlayerAchievementsComponent(params: { badges: StarBadgeCase }) {
                             <p className="text-sm">El título de Leyenda Estelar se otorga al jugador que más trofeos totales tenga acumulados al final de la temporada.</p>
                             <ul className="flex flex-row flex-wrap justify-center flex-1 gap-2">
                                 {
-                                    badges.starLegendBadges.map((badge, index) => (
-                                        <li key={index} className="flex flex-col items-center flex-1">
+                                    badges.starLegendBadges.map((badge) => (
+                                        <li key={badge.seasonId} className="flex flex-col items-center flex-1">
                                             <Image src="/star_players/star_legend.png" height={100} width={100} alt="Gran estelar"/>
                                             <p className="text-md">
                                                 Temporada {badge.seasonId}
@@ -84,8 +84,8 @@ export function PlayerAchievementsComponent(params: { badges: StarBadgeCase }) {
                             <p className="text-sm">El título de Maestro Estelar se otorga al jugador que más alto se encuentre en ranked al final de la temporada.</p>
                             <ul className="flex flex-row flex-wrap justify-center flex-1 gap-2">
                                 {
-                                    badges.starMasterBadges.map((badge, index) => (
-                                        <li key={index} className="flex flex-col items-center flex-1">
+                                    badges.starMasterBadges.map((badge) => (
+                                        <li key={badge.seasonId} className="flex flex-col items-center flex-1">
                                             <Image src="/star_players/star_master.png" height={100} width={100} alt="Gran estelar"/>
                                             <p className="text-md">
                                                 Temporada {badge.seasonId}
@@ -113,8 +113,8 @@ export function PlayerAchievementsComponent(params: { badges: StarBadgeCase }) {
                             <p className="text-sm">El título de Jugador Estelar se otorga al jugador que más trofeos ha subido a lo largo de una semana.</p>
                             <ul className="flex flex-row flex-wrap justify-center flex-1 gap-2">
                                 {
-                                    badges.starPlayerBadges.map((badge, index) => (
-                                        <li key={index} className="flex flex-col items-center flex-1">
+                                    badges.starPlayerBadges.map((badge) => (
+                                        <li key={badge.seasonId + "-" + badge.week} className="flex flex-col items-center flex-1">
                                             <Image src="/star_players/star_player.png" height={100} width={100} alt="Gran estelar"/>
                                             <p className="text-md">
                                                 Temporada {badge.seasonId}

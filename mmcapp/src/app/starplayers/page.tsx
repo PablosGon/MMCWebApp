@@ -38,7 +38,7 @@ export default function StarPlayersPage() {
         return (
             <div className="max-w-250 m-auto">
                 <Link href="/" className="text-lg">← Volver</Link>
-                <ul>
+                <ul className="flex flex-col gap-5">
                     {
                         seasons.map((season) => (
                             <li key={season.id} className="bg-gray-800 p-5 rounded-2xl">
