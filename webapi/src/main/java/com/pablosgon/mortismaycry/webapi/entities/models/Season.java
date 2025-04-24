@@ -30,7 +30,7 @@ public class Season {
     //#region Private Methods
 
     private void initializeClubSeasonStarRegistries() {
-        starPlayersByClub = new ClubSeasonStarRegistry[ClubConstants.CLUB_IDS.length];
+        starPlayersByClub = new ClubSeasonStarRegistry[ClubConstants.getClubIds().length];
         for (int i = 0; i < starPlayersByClub.length; i++) {
             starPlayersByClub[i] = new ClubSeasonStarRegistry();
         }

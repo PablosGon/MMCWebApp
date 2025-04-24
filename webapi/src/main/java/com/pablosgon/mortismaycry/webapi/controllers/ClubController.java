@@ -29,31 +29,18 @@ public class ClubController {
 
     @GetMapping("/club/{clubTag}")
     public ResponseEntity<Club> getClub(@PathVariable String clubTag){
-        try {
-            Club club = business.getClub(clubTag);
+        Club club = business.getClub(clubTag);
 
-            if(club != null) {
-                return new ResponseEntity<>(club, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        } catch(IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch(Exception e){
+        if(club != null) {
+            return new ResponseEntity<>(club, HttpStatus.OK);
+        } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/updateMembers")
     public ResponseEntity<Club> updateMembers(@RequestBody UpdateMembersRequest request) {
-        try {
-            business.updateMembers(request);
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch(Exception e){
-            return ResponseEntity.internalServerError().build();
-        }
-        
+        business.updateMembers(request);
         return ResponseEntity.ok().build();
     }
     

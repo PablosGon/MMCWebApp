@@ -1,11 +1,14 @@
 package com.pablosgon.mortismaycry.webapi.business;
 
+import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
@@ -26,6 +29,9 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.requests.CreateSeasonRequest;
+import com.pablosgon.mortismaycry.webapi.exceptions.BusinessException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BsForbiddenException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BsNotFoundException;
 import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 
 public class SeasonBusinessImpl implements SeasonBusiness {
@@ -34,6 +40,8 @@ public class SeasonBusinessImpl implements SeasonBusiness {
     private ModelMapper modelMapper;
     private BSClient client;
     private ObjectMapper objectMapper;
+
+    private Logger logger = LoggerFactory.getLogger(SeasonBusinessImpl.class);
 
     public SeasonBusinessImpl(
         ModelMapper modelMapper,
@@ -48,9 +56,9 @@ public class SeasonBusinessImpl implements SeasonBusiness {
     }
 
     @Override
-    public List<Season> getSeasons() throws Exception {
+    public List<Season> getSeasons() {
         
-        System.out.println("Getting seasons");
+        logger.info("Getting season history");
 
         List<Season> seasons = new ArrayList<>();
 
@@ -64,9 +72,21 @@ public class SeasonBusinessImpl implements SeasonBusiness {
                 mapNamesAndProfileIconsToAllStarPlayers(season, allMembers);
                 seasons.add(season);
             }
-        } catch (Exception e) {
-            System.err.println("Failed to get seasons: " + e.getMessage());
+
+            logger.info("Successfully retireved seasons history");
+        } catch (BsNotFoundException e) {
+            logger.error("There was an error while retrieving seasons history. Club not found");
             throw e;
+        } catch (BsForbiddenException e) {
+            logger.error("There was an error while retrieving seasons history. Access to BS API Forbidden. Check API key");
+            throw e;
+        } catch (InterruptedException e) {
+            logger.error("There was an error while retrieving seasons history. Task interrupted.");
+            Thread.currentThread().interrupt();
+            throw new BusinessException();
+        } catch (Exception e) {
+            logger.error("There was an error while retrieving seasons history. Generic error occured. Check stack trace");
+            throw new BusinessException();
         }
 
         return seasons;
@@ -129,9 +149,10 @@ public class SeasonBusinessImpl implements SeasonBusiness {
         }
     }
 
-    private List<BSClubMember> allMembers() throws Exception {
+    private List<BSClubMember> allMembers() throws IOException, InterruptedException {
         List<BSClubMember> members = new ArrayList<>();
-        String[] clubTags = ClubConstants.CLUB_IDS;
+        String[] clubTags = ClubConstants.getClubIds();
+
         for (String tag : clubTags) {
             HttpResponse<String> response = client.getClub(tag);
             BSClub club = objectMapper.readValue(response.body(), BSClub.class);

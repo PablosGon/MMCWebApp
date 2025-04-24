@@ -2,7 +2,6 @@ package com.pablosgon.mortismaycry.webapi.controllers;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,25 +27,18 @@ public class SeasonController {
     }
 
     @GetMapping("/seasons")
-    public ResponseEntity<List<Season>> getMethodName() {
-        try {
-            List<Season> seasons = business.getSeasons();
+    public ResponseEntity<List<Season>> getSeasons() {
+        List<Season> seasons = business.getSeasons();
 
-            if(seasons != null) {
-                return ResponseEntity.ok(seasons);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch(Exception e){
-            System.out.println(e);
+        if(seasons != null) {
+            return ResponseEntity.ok(seasons);
+        } else {
             return ResponseEntity.internalServerError().build();
         }
     }
     
     @PostMapping("/season")
-    public ResponseEntity<Integer> postMethodName(@RequestBody CreateSeasonRequest request) {
+    public ResponseEntity<Integer> postSeason(@RequestBody CreateSeasonRequest request) {
         business.createSeason(request);
         return ResponseEntity.ok(request.getId());
     }

@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "app.bs.api.key",
+  "type": "java.lang.String",
+  "description": "A description for 'app.bs.api.key'"
+}]}

@@ -1,15 +1,17 @@
 package com.pablosgon.mortismaycry.webapi.business;
 
+import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 import com.pablosgon.mortismaycry.webapi.constants.ClubConstants;
-import com.pablosgon.mortismaycry.webapi.entities.models.ClubMember;
 import com.pablosgon.mortismaycry.webapi.entities.models.Player;
 import com.pablosgon.mortismaycry.webapi.entities.models.StarBadgeCase;
 import com.pablosgon.mortismaycry.webapi.entities.models.StarLegend;
@@ -24,7 +26,9 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarMaster;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
-import com.pablosgon.mortismaycry.webapi.exceptions.NotFoundException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BusinessException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BsForbiddenException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BsNotFoundException;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
 
@@ -35,6 +39,8 @@ public class PlayerBusinessImpl implements PlayerBusiness {
     private ObjectMapper objectMapper;
     private PlayerRepository playerRepository;
     private StarPlayerRepository starPlayerRepository;
+
+    private Logger logger = LoggerFactory.getLogger(PlayerBusinessImpl.class);
 
     public PlayerBusinessImpl(
         BSClient client,
@@ -51,56 +57,80 @@ public class PlayerBusinessImpl implements PlayerBusiness {
     }
 
     @Override
-    public Player getPlayer(String tag) throws Exception {
-        if(tag == null) {
-            throw new IllegalArgumentException("player tag must not be null");
-        }
+    public Player getPlayer(String tag) {
+        logger.info("Getting Player {}", tag);
 
-        System.out.println("Getting Player " + tag);
+        if(tag == null) {
+            logger.error("Error validating request: player tag must not be null");
+            throw new IllegalArgumentException();
+        }
 
         Player player;
 
         try {
             HttpResponse<String> response = client.getPlayer(tag);
-            BSPlayer bsPlayer = objectMapper.readValue(response.body(), BSPlayer.class);
-            JPAPlayer jpaPlayer = playerRepository.findPlayerByTag(tag);
-            player = modelMapper.map(bsPlayer, Player.class);
+            JPAPlayer jpaPlayer = playerRepository.findPlayerByTag(tag).orElse(null);
 
-            if(jpaPlayer == null) {
-                throw new NotFoundException();
+            if (jpaPlayer == null || response.statusCode() == 404) {
+                throw new BsNotFoundException();
+            } else if (response.statusCode() == 403) {
+                throw new BsForbiddenException();
             }
 
+            BSPlayer bsPlayer = objectMapper.readValue(response.body(), BSPlayer.class);
+            player = modelMapper.map(bsPlayer, Player.class);
             modelMapper.map(jpaPlayer, player);
             mapStarBadgesToPlayer(player);
-            System.out.println("Get Player successful: " + response.body());
-        } catch (Exception e) {
+            logger.info("Successfully retrieved player with tag {}", tag);
+        } catch (BsNotFoundException e) {
+            logger.error("There was an error while getting the player {}. Player not found", tag);
             throw e;
+        } catch (BsForbiddenException e) {
+            logger.error("There was an error while getting the player {}. Access to BS API Forbidden. Check API key", tag);
+            throw e;
+        } catch (InterruptedException e) {
+            logger.error("There was an error while getting the player {}. Generic error occured. Task interrupted.", tag);
+            Thread.currentThread().interrupt();
+            throw new BusinessException();
+        } catch (Exception e) {
+            logger.error("There was an error while getting the player {}. Generic error occured. Check stack trace", tag);
+            throw new BusinessException();
         }
 
         return player;
     }
 
     @Override
-    public Player createPlayer(String tag) throws Exception {
+    public Player createPlayer(String tag) {
+        logger.info("Creating player {}", tag);
+
         if(tag == null || notInClub(tag)) {
+            logger.error("Error validating request: player tag must not be null or belong to a a non-club member");
             throw new IllegalArgumentException();
         }
-
-        System.out.println("Creating player with tag " + tag);
 
         Player player;
 
         try {
             JPAPlayer jpaPlayer = new JPAPlayer();
             jpaPlayer.setTag(tag);
-    
-            jpaPlayer = playerRepository.save(jpaPlayer);
-            
+            playerRepository.save(jpaPlayer);
             HttpResponse<String> response = client.getPlayer(tag);
             BSPlayer bsPlayer = objectMapper.readValue(response.body(), BSPlayer.class);
             player = modelMapper.map(bsPlayer, Player.class);
-        } catch (Exception e) {
+        } catch (BsNotFoundException e) {
+            logger.error("There was an error while creating the player {}. Player not found", tag);
             throw e;
+        } catch (BsForbiddenException e) {
+            logger.error("There was an error while creating the player {}. Access to BS API Forbidden. Check API key", tag);
+            throw e;
+        } catch (InterruptedException e) {
+            logger.error("There was an error while creating the player {}. Generic error occured. Check stack trace", tag);
+            Thread.currentThread().interrupt();
+            throw new BusinessException();
+        } catch (Exception e) {
+            logger.error("There was an error while creating the player {}. Generic error occured. Check stack trace", tag);
+            throw new BusinessException();
         }
 
         return player;
@@ -108,20 +138,22 @@ public class PlayerBusinessImpl implements PlayerBusiness {
     
     //#region
 
-    private boolean notInClub(String tag) throws Exception {
+    private boolean notInClub(String tag) {
         boolean inClub = false;
-        
-        try {
-            String[] clubIds = ClubConstants.CLUB_IDS;
-            for (String id : clubIds) {
-                BSClub club = objectMapper.readValue(client.getClub(id).body(), BSClub.class);
-                if(playerInBSClub(tag, club)) {
-                    inClub = true;
-                    continue;
-                }
+        String[] clubIds = ClubConstants.getClubIds();
+
+        int i = 0;
+        while (i < clubIds.length && !inClub) {
+            try {
+                BSClub club = objectMapper.readValue(client.getClub(clubIds[i]).body(), BSClub.class);
+                inClub = playerInBSClub(tag, club);
+            } catch (IOException e) {
+                throw new BusinessException();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new BusinessException();
             }
-        } catch (Exception e) {
-            throw e;
+            i++;
         }
         
         return !inClub;

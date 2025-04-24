@@ -1,10 +1,13 @@
 package com.pablosgon.mortismaycry.webapi.business;
 
+import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
@@ -27,6 +30,9 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPATrophyRegistry;
 import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
+import com.pablosgon.mortismaycry.webapi.exceptions.BusinessException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BsForbiddenException;
+import com.pablosgon.mortismaycry.webapi.exceptions.BsNotFoundException;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
@@ -41,6 +47,8 @@ public class ClubBusinessImpl implements ClubBusiness {
     private PlayerRepository playerRepository;
     private StarPlayerRepository starPlayerRepository;
     private SeasonRepository seasonRepository;
+
+    private Logger logger = LoggerFactory.getLogger(ClubBusinessImpl.class);
 
     public ClubBusinessImpl(
         BSClient bsClient,
@@ -63,10 +71,10 @@ public class ClubBusinessImpl implements ClubBusiness {
     @Override
     public Club getClub(String tag) {
         if (tag == null) {
-            throw new IllegalArgumentException("club tag must not be null");
+            throw new IllegalArgumentException("Club tag must not be null");
         }
 
-        System.out.println("Getting Club " + tag);
+        logger.info("Getting Club {}", tag);
 
         Club club;
 
@@ -76,31 +84,55 @@ public class ClubBusinessImpl implements ClubBusiness {
             club = modelMapper.map(bsClub, Club.class);
             mapLastRegistriesToMembers(club.getMembers());
             mapStarBadgesToMembers(club.getMembers());
-            System.out.println("Get Club successful: " + response.body());
-        } catch (Exception e){
-            System.out.println(e);
-            throw new RuntimeException(e.getMessage());
+            logger.info("Successfully retrieved club information with tag {}", tag);
+        } catch (BsNotFoundException e) {
+            logger.error("There was an error while getting the club {}. Club not found", tag);
+            throw e;
+        } catch (BsForbiddenException e) {
+            logger.error("There was an error while getting the club {}. Access to BS API Forbidden. Check API key", tag);
+            throw e;
+        } catch (InterruptedException e) {
+            logger.error("There was an error while getting the club {}. Task interrupted", tag);
+            Thread.currentThread().interrupt();
+            throw new BusinessException();
+        } catch (Exception e) {
+            logger.error("There was an error while getting the club {}. Generic error occured. Check stack trace", tag);
+            throw new BusinessException();
         }
+        
         return club;
     }
 
     @Override
-    public void updateMembers(UpdateMembersRequest request) throws Exception {
+    public void updateMembers(UpdateMembersRequest request) {
+        logger.info("Updating all members");
+
         if (request == null || invalidUpdateMembersRequest(request) || weekAlreadyRegistered(request.getSeason(), request.getWeek())) {
             throw new IllegalArgumentException();
         }
 
         try {
-            for (int i = 0; i < ClubConstants.CLUB_IDS.length; i++) {
-                List<ClubMember> members = allCurrentMembersFromClub(ClubConstants.CLUB_IDS[i]);
+            for (int i = 0; i < ClubConstants.getClubIds().length; i++) {
+                List<ClubMember> members = allCurrentMembersFromClub(ClubConstants.getClubIds()[i]);
                 addAllUnregisteredPlayers(members);
                 List<JPATrophyRegistry> newRegistries = trophyRegistriesFromMembers(members, request.getSeason(), request.getWeek());
                 trophyRegistryRepository.saveAll(newRegistries);
                 createWeeklyStarPlayers(members, i, request.getSeason(), request.getWeek());
             }
-
-        } catch (Exception e) {
+            logger.info("Successfully updated all club members");
+        } catch (BsNotFoundException e) {
+            logger.error("There was an error while updating members. Club not found");
             throw e;
+        } catch (BsForbiddenException e) {
+            logger.error("There was an error while updating members. Access to BS API Forbidden. Check API key");
+            throw e;
+        } catch (InterruptedException e) {
+            logger.error("There was an error while updating members. Task interrupted.");
+            Thread.currentThread().interrupt();
+            throw new BusinessException();
+        } catch (Exception e) {
+            logger.error("There was an error while updating members. Generic error occured. Check stack trace");
+            throw new BusinessException();
         }
     }
 
@@ -111,7 +143,7 @@ public class ClubBusinessImpl implements ClubBusiness {
         members.sort((m1, m2) -> m2.getLastRegistry() - m1.getLastRegistry());
         ClubMember clubMemberWithMostProgression = members.getFirst();
 
-        JPAPlayer playerWithMostProgression = playerRepository.findPlayerByTag(clubMemberWithMostProgression.getTag().replace("#", ""));
+        JPAPlayer playerWithMostProgression = playerRepository.findPlayerByTag(clubMemberWithMostProgression.getTag().replace("#", "")).orElse(null);
         JPASeason jpaSeason = seasonRepository.findById(season).orElse(null);
 
         JPAStarWeekPlayer newStarPlayer = new JPAStarWeekPlayer(playerWithMostProgression, jpaSeason, week, clubMemberWithMostProgression.getLastRegistry(), clubIndex);
@@ -178,29 +210,28 @@ public class ClubBusinessImpl implements ClubBusiness {
         return !registries.isEmpty();
     }
 
-    private void addAllUnregisteredPlayers(List<ClubMember> currentMembers) throws Exception {
+    private void addAllUnregisteredPlayers(List<ClubMember> currentMembers) {
         List<String> registeredPlayerTags = playerRepository.findAll().stream().map(x -> x.getTag()).toList();
         List<ClubMember> unregisteredMembers = currentMembers.stream().filter(x -> !registeredPlayerTags.contains(x.getTag().replace("#", ""))).toList();
 
         for (ClubMember member : unregisteredMembers) {
             String tag = member.getTag().replace("#", "");
-            System.out.println("Creating player: " + tag);
+            logger.info("Creating unregistered player {}", tag);
             JPAPlayer newPlayer = new JPAPlayer();
             newPlayer.setTag(tag);
             playerRepository.save(newPlayer);
-            System.out.println("Player " + tag + " created succesfully!");
+            logger.info("Successfully created unregistered player with tag {}", tag);
         }
     }
 
-    private List<ClubMember> allCurrentMembersFromClub(String tag) throws Exception {
+    private List<ClubMember> allCurrentMembersFromClub(String tag) throws IOException, InterruptedException {
         List<ClubMember> members = new ArrayList<>();
-
         HttpResponse<String> response = client.getClub(tag);
         BSClub club = objectMapper.readValue(response.body(), BSClub.class);
+
         for (BSClubMember member : club.getMembers()) {
             members.add(modelMapper.map(member, ClubMember.class));
         }
-        
 
         return members;
     }

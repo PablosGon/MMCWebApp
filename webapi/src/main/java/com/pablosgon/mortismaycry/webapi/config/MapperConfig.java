@@ -28,9 +28,7 @@ public class MapperConfig {
         ModelMapper mapper = new ModelMapper();
 
         mapper.typeMap(BSClubMember.class, ClubMember.class)
-            .addMappings(m -> {
-                m.map(src -> src.getIcon().getId(), ClubMember::setIconId);
-            });
+            .addMappings(m -> m.map(src -> src.getIcon().getId(), ClubMember::setIconId));
 
         mapper.typeMap(BSPlayer.class, Player.class)
             .addMappings(m -> {
@@ -40,9 +38,7 @@ public class MapperConfig {
             });
 
         mapper.typeMap(JPAPlayer.class, Player.class)
-            .addMappings(m -> {
-                m.map(src -> src.getSeasonTrophyProgress(), Player::setSeasonTrophyProgress);
-            });
+            .addMappings(m -> m.map(JPAPlayer::getSeasonTrophyProgress, Player::setSeasonTrophyProgress));
 
         mapper.typeMap(JPAStarPlayer.class, StarPlayer.class)
             .addMappings(m -> {

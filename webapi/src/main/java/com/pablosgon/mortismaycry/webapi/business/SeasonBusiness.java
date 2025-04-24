@@ -7,7 +7,7 @@ import com.pablosgon.mortismaycry.webapi.entities.requests.CreateSeasonRequest;
 
 public interface SeasonBusiness {
     
-    public List<Season> getSeasons() throws Exception;
+    public List<Season> getSeasons();
     public void createSeason(CreateSeasonRequest request);
 
 }
