@@ -15,10 +15,11 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
     return (
         <div className="flex flex-col w-full">
             <article>
-                <button className="flex flex-row items-center w-full" onClick={() => toggle(1)}>
+                <button className="flex flex-row items-center w-full gap-2" onClick={() => toggle(1)}>
                     <Image src="/star_players/grand_star_player.png" width={50} height={50} alt="Gran estelar" />
                     <p>Gran estelar</p>
                     <p className="ml-auto">{badges.grandStarPlayerBadges.length}</p>
+                    <p>{openIndex == 1 ? "⤵" : "→"}</p>
                 </button>
                 {
                     openIndex === 1 &&
@@ -42,12 +43,12 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
                         </div>
                 }
             </article>
-            <hr/>
             <article>
-                <button className="flex flex-row items-center w-full" onClick={() => toggle(2)}>
+                <button className="flex flex-row items-center w-full gap-2" onClick={() => toggle(2)}>
                     <Image src="/star_players/star_legend.png" width={50} height={50} alt="Leyenda estelar" />
                     <p>Leyenda estelar</p>
                     <p className="ml-auto">{badges.starLegendBadges.length}</p>
+                    <p>{openIndex == 2 ? "⤵" : "→"}</p>
                 </button>
                 {
                     openIndex === 2 &&
@@ -73,10 +74,11 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
             </article>
             <hr/>
             <article>
-                <button className="flex flex-row items-center w-full" onClick={() => toggle(3)}>
+                <button className="flex flex-row items-center w-full gap-2" onClick={() => toggle(3)}>
                     <Image src="/star_players/star_master.png" width={50} height={50} alt="Maestro estelar" />
                     <p>Maestro estelar</p>
                     <p className="ml-auto">{badges.starMasterBadges.length}</p>
+                    <p>{openIndex == 3 ? "⤵" : "→"}</p>
                 </button>
                 {
                     openIndex === 3 &&
@@ -102,10 +104,11 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
             </article>
             <hr/>
             <article>
-                <button className="flex flex-row items-center w-full" onClick={() => toggle(4)}>
+                <button className="flex flex-row items-center w-full gap-2" onClick={() => toggle(4)}>
                     <Image src="/star_players/star_player.png" width={50} height={50} alt="Estelar" />
                     <p>Jugador estelar</p>
                     <p className="ml-auto">{badges.starPlayerBadges.length}</p>
+                    <p>{openIndex == 4 ? "⤵" : "→"}</p>
                 </button>
                 {
                     openIndex === 4 &&
