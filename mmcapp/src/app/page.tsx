@@ -60,6 +60,11 @@ export default function Home() {
           </p>
         </Link>
       </section>
+
+      <footer className="text-end">
+        <small className="text-end">
+          MMC App by <Link href={"club/0/player/20CU8228G"} className="underline">Pablo Sánchez González</Link></small>
+      </footer>
     </div>
   );
 }
