@@ -43,6 +43,7 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
                         </div>
                 }
             </article>
+            <hr/>
             <article>
                 <button className="flex flex-row items-center w-full gap-2" onClick={() => toggle(2)}>
                     <Image src="/star_players/star_legend.png" width={50} height={50} alt="Leyenda estelar" />
