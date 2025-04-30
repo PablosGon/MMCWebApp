@@ -41,7 +41,17 @@ export default function Home() {
           Jugadores estelares
         </h2>
         <Link href="/starplayers" className="bg-gray-800 rounded-2xl p-5 flex flex-col items-center">
-          <Image src={"/AppLogo_Beta.png"} width={300} height={200} alt="logo beta" className=""/>
+          <div className="flex items-center">
+            <div className="min-w-20">
+              <Image src={"/star_players/star_legend.png"} width={200} height={200} alt="grand star player"/>
+            </div>
+            <div className="min-w-20">
+              <Image src={"/star_players/grand_star_player.png"} width={200} height={200} alt="grand star player" className="min-w-20"/>
+            </div>
+            <div className="min-w-20">
+              <Image src={"/star_players/star_master.png"} width={200} height={200} alt="grand star player" className="min-w-20"/>
+            </div>
+          </div>
           <h1 className="text-2xl text-center">
             Accede al estrellato
           </h1>
