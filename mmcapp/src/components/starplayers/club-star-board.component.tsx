@@ -1,6 +1,7 @@
 import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubStarPlayerRegistry } from "@/models/club-star-player-registry.model";
 import Image from "next/image";
+import Link from "next/link";
 
 export function ClubStarBoardComponent(params: Readonly<{club: ClubStarPlayerRegistry, index: number}>) {
 
@@ -22,7 +23,9 @@ export function ClubStarBoardComponent(params: Readonly<{club: ClubStarPlayerReg
                                         <h3 className="text-2xl">
                                             Gran Estelar
                                         </h3>
-                                        <Image src={club.grandStarPlayer.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + club.grandStarPlayer.profileIconId + ".png" : "/profile-icon-default.png"} height={200} width={200} alt={club.grandStarPlayer.name}/>
+                                        <Link href={`club/0/player/${club.grandStarPlayer.playerTag}`}>
+                                            <Image src={club.grandStarPlayer.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + club.grandStarPlayer.profileIconId + ".png" : "/profile-icon-default.png"} height={200} width={200} alt={club.grandStarPlayer.name}/>
+                                        </Link>
                                         <p className="text-xl">
                                             {club.grandStarPlayer.name}
                                         </p>
@@ -37,7 +40,9 @@ export function ClubStarBoardComponent(params: Readonly<{club: ClubStarPlayerReg
                                         <h3 className="text-2xl">
                                             Leyenda Estelar
                                         </h3>
-                                        <Image src={club.starLegend.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + club.starLegend.profileIconId + ".png" : "/profile-icon-default.png"} height={200} width={200} alt={club.starLegend.name}/>
+                                        <Link href={`club/0/player/${club.starLegend.playerTag}`}>
+                                            <Image src={club.starLegend.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + club.starLegend.profileIconId + ".png" : "/profile-icon-default.png"} height={200} width={200} alt={club.starLegend.name}/>
+                                        </Link>
                                         <p className="text-xl">
                                             {club.starLegend.name}
                                         </p>
@@ -53,7 +58,9 @@ export function ClubStarBoardComponent(params: Readonly<{club: ClubStarPlayerReg
                                         <h3 className="text-2xl">
                                             Maestro Estelar
                                         </h3>
-                                        <Image src={club.starMaster.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + club.starMaster.profileIconId + ".png" : "/profile-icon-default.png"} height={200} width={200} alt={club.starMaster != null ? club.starMaster.name : 'XD'}/>
+                                        <Link href={`club/0/player/${club.starMaster.playerTag}`}>
+                                           <Image src={club.starMaster.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + club.starMaster.profileIconId + ".png" : "/profile-icon-default.png"} height={200} width={200} alt={club.starMaster != null ? club.starMaster.name : 'XD'}/>
+                                        </Link>
                                         <p className="text-xl">
                                             {club.starMaster.name}
                                         </p>
@@ -74,7 +81,9 @@ export function ClubStarBoardComponent(params: Readonly<{club: ClubStarPlayerReg
                                             <p className="text-md">
                                                 Semana {starPlayer.week}
                                             </p>
-                                            <Image src={starPlayer.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + starPlayer.profileIconId + ".png" : "/profile-icon-default.png"} height={100} width={100} alt={starPlayer.name}/>
+                                            <Link href={`club/0/player/${starPlayer.playerTag}`}>
+                                                <Image src={starPlayer.profileIconId != -1 ? "https://cdn.brawlify.com/profile-icons/regular/" + starPlayer.profileIconId + ".png" : "/profile-icon-default.png"} height={100} width={100} alt={starPlayer.name}/>
+                                            </Link>
                                             <p className="text-lg">
                                                 {starPlayer.name}
                                             </p>

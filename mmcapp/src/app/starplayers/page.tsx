@@ -41,9 +41,10 @@ export default function StarPlayersPage() {
                 <ul className="flex flex-col gap-5">
                     {
                         seasons.map((season) => (
-                            <li key={season.id} className="bg-gray-800 p-5 rounded-2xl">
-                                <SeasonStarBoardComponent season={season} />
-                            </li>
+                            seasonIsNotNew(season) &&
+                                <li key={season.id} className="bg-gray-800 p-5 rounded-2xl">
+                                    <SeasonStarBoardComponent season={season} />
+                                </li>
                         ))
                     }
                 </ul>
@@ -51,4 +52,15 @@ export default function StarPlayersPage() {
 
         );
     }
+}
+
+function seasonIsNotNew(season:Season) {
+    let isNew = true;
+    season.starPlayersByClub.forEach((club) => {
+        console.log(club.weeklyStarPlayers);
+        if(club.weeklyStarPlayers.length > 0) {
+            isNew = false;
+        }
+    });
+    return !isNew;
 }
