@@ -1,3 +1,4 @@
+import { StarBadgeCase } from "./star-badge-case.model";
 import { TrophyRegistry } from "./trophy-registry.model";
 
 export interface Player {
@@ -11,4 +12,5 @@ export interface Player {
     nameColor: string,
     trophyRegistries: TrophyRegistry[],
     seasonTrophyProgress: number[],
+    badges: StarBadgeCase,
 }

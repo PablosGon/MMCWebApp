@@ -58,20 +58,20 @@ export default function ClubPage() {
     )
   } else {
     return (
-      <div className="bg">
+      <div>
         <Link href="/" className="text-lg">← Volver</Link>
         <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
             <Image src={"https://cdn.brawlify.com/club-badges/regular/" + club?.badgeId + ".png"} alt="Club Badge" width={500} height={500} className="w-50"/>
             <div>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl">{club?.name}</h1>
-              <p className="text-sm sm:text-md md:text-lg lg:text-xl xl:text-2xl">{club?.description}</p>
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl">{club?.name}</h1>
+              <p className="text-sm sm:text-md md:text-lg lg:text-xl">{club?.description}</p>
             </div>
         </header>
         <section className="container mt-10">
-          <header className="flex">
-            <h2 className="text-3xl md:text5xl">Miembros</h2>
-            <label className="ml-auto">
-              Ordernar por
+          <header className="flex items-center">
+            <h2 className="text-2xl md:text5xl">Miembros</h2>
+            <label className="ml-auto text-end flex flex-row">
+              <p>⇅</p>
               <select onChange={(e) => setSortBy(Number(e.target.value) as ClubMembersOrderBy)} value={sortBy}>
                 <option value={ClubMembersOrderBy.Trophies}>Trofeos</option>
                 <option value={ClubMembersOrderBy.LastWeek}>Última semana</option>
@@ -83,7 +83,7 @@ export default function ClubPage() {
           <ul className="flex flex-col gap-3">
             {
               members?.map((member:ClubMember, index:number) => (
-                <li className="bg-gray-800 p-5 rounded-2xl " key={member.tag}>
+                <li className="bg-gray-800 p-3 rounded-2xl " key={member.tag}>
                   <Link href={`/club/${clubId}/player/${member.tag.replace("#", "")}`}>
                     <ClubMemberItem member={member} index={index}/>
                   </Link>

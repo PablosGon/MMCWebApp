@@ -6,5 +6,5 @@ import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 public interface ClubBusiness {
     
     public Club getClub(String tag);
-    public void updateMembers(UpdateMembersRequest request) throws Exception;
+    public void updateMembers(UpdateMembersRequest request);
 }
