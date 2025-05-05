@@ -141,7 +141,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     private void createWeeklyStarPlayers(List<ClubMember> members, int clubIndex, int season, int week) {
         mapLastRegistriesToMembers(members);
         members.sort((m1, m2) -> m2.getLastRegistry() - m1.getLastRegistry());
-        ClubMember clubMemberWithMostProgression = members.get(0);
+        ClubMember clubMemberWithMostProgression = members.getFirst();
 
         JPAPlayer playerWithMostProgression = playerRepository.findPlayerByTag(clubMemberWithMostProgression.getTag().replace("#", "")).orElse(null);
         JPASeason jpaSeason = seasonRepository.findById(season).orElse(null);
