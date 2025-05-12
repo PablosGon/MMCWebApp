@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 import com.pablosgon.mortismaycry.webapi.constants.ClubConstants;
+import com.pablosgon.mortismaycry.webapi.entities.models.MegapigRegistry;
 import com.pablosgon.mortismaycry.webapi.entities.models.Player;
 import com.pablosgon.mortismaycry.webapi.entities.models.StarBadgeCase;
 import com.pablosgon.mortismaycry.webapi.entities.models.StarLegend;
@@ -20,6 +21,7 @@ import com.pablosgon.mortismaycry.webapi.entities.models.StarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClub;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSPlayer;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAMegapigRegistry;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarLegend;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarMaster;
@@ -80,6 +82,7 @@ public class PlayerBusinessImpl implements PlayerBusiness {
             BSPlayer bsPlayer = objectMapper.readValue(response.body(), BSPlayer.class);
             player = modelMapper.map(bsPlayer, Player.class);
             modelMapper.map(jpaPlayer, player);
+            mapMegapigRegistriesToPlayer(jpaPlayer, player);
             mapStarBadgesToPlayer(player);
             logger.info("Successfully retrieved player with tag {}", tag);
         } catch (BsNotFoundException e) {
@@ -136,7 +139,7 @@ public class PlayerBusinessImpl implements PlayerBusiness {
         return player;
     }
     
-    //#region
+    //#region Private methods
 
     private boolean notInClub(String tag) {
         boolean inClub = false;
@@ -187,6 +190,12 @@ public class PlayerBusinessImpl implements PlayerBusiness {
         }
 
         player.setBadges(new StarBadgeCase(weeklyBadges, grandBadges, legendBadges, masterBadges));
+    }
+
+    private void mapMegapigRegistriesToPlayer(JPAPlayer jpaPlayer, Player player) {
+        for (JPAMegapigRegistry jpaMegapigRegistry : jpaPlayer.getMegapigRegistries()) {
+            player.getClubEventRegistries().add(modelMapper.map(jpaMegapigRegistry, MegapigRegistry.class));
+        }
     }
 
     //#endregion

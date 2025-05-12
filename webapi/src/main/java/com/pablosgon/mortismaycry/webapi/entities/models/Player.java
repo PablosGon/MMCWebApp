@@ -17,6 +17,7 @@ public class Player {
     private List<TrophyRegistry> trophyRegistries = new ArrayList<>();
     private List<Integer> seasonTrophyProgress = new ArrayList<>();
     private StarBadgeCase badges;
+    private List<MegapigRegistry> clubEventRegistries = new ArrayList<>();
 
     public String getTag() {
         return this.tag;
@@ -104,6 +105,10 @@ public class Player {
 
     public void setBadges(StarBadgeCase badges) {
         this.badges = badges;
+    }
+
+    public List<MegapigRegistry> getClubEventRegistries() {
+        return this.clubEventRegistries;
     }
 
 }

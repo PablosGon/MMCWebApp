@@ -10,6 +10,6 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPASeason;
 public interface SeasonRepository extends JpaRepository<JPASeason, Integer> {
     
     @Query("select s from JPASeason s order by s.id desc")
-    public List<JPASeason> findAllDescOrder();
+    List<JPASeason> findAllDescOrder();
 
 }

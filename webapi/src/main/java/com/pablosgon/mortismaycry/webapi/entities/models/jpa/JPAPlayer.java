@@ -23,6 +23,8 @@ public class JPAPlayer {
     @OneToMany(mappedBy = "player")
     private List<JPAStarPlayer> starPlayerRegistries;
 
+    @OneToMany(mappedBy = "player")
+    private List<JPAMegapigRegistry> megapigRegistries;
 
     public JPAPlayer() {}
 
@@ -53,6 +55,14 @@ public class JPAPlayer {
 
     public void setStarPlayerRegistries(List<JPAStarPlayer> starPlayerRegistries) {
         this.starPlayerRegistries = starPlayerRegistries;
+    }
+
+    public List<JPAMegapigRegistry> getMegapigRegistries() {
+        return this.megapigRegistries;
+    }
+
+    public void setMegapigRegistries(List<JPAMegapigRegistry> megapigRegistries) {
+        this.megapigRegistries = megapigRegistries;
     }
 
     

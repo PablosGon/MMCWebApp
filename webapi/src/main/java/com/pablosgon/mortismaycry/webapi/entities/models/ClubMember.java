@@ -1,5 +1,9 @@
 package com.pablosgon.mortismaycry.webapi.entities.models;
 
+import java.util.List;
+
+import com.pablosgon.mortismaycry.webapi.enums.MegapigStatus;
+
 public class ClubMember {
     
     private int iconId;
@@ -10,6 +14,7 @@ public class ClubMember {
     private String nameColor;
     private int lastRegistry;
     private StarBadgeCase starBadgeCase;
+    private List<MegapigStatus> lastMegapigs;
 
 
     public int getIconId() {
@@ -74,6 +79,14 @@ public class ClubMember {
 
     public void setStarBadgeCase(StarBadgeCase starBadgeCase) {
         this.starBadgeCase = starBadgeCase;
+    }
+
+    public List<MegapigStatus> getLastMegapigs() {
+        return this.lastMegapigs;
+    }
+
+    public void setLastMegapigs(List<MegapigStatus> lastMegapigs) {
+        this.lastMegapigs = lastMegapigs;
     }
 
 }

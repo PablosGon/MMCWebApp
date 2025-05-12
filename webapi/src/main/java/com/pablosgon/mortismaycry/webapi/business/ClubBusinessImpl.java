@@ -21,6 +21,7 @@ import com.pablosgon.mortismaycry.webapi.entities.models.StarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClub;
 import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
+import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAMegapigRegistry;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPASeason;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarLegend;
@@ -29,17 +30,20 @@ import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPATrophyRegistry;
+import com.pablosgon.mortismaycry.webapi.entities.requests.NewMegapigRequest;
+import com.pablosgon.mortismaycry.webapi.entities.requests.NewMegapigRequestMember;
 import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 import com.pablosgon.mortismaycry.webapi.exceptions.BusinessException;
 import com.pablosgon.mortismaycry.webapi.exceptions.BsForbiddenException;
 import com.pablosgon.mortismaycry.webapi.exceptions.BsNotFoundException;
+import com.pablosgon.mortismaycry.webapi.repositories.MegapigRegistryRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.TrophyRegistryRepository;
 
 public class ClubBusinessImpl implements ClubBusiness {
-    
+
     private BSClient client;
     private ModelMapper modelMapper;
     private ObjectMapper objectMapper;
@@ -47,8 +51,11 @@ public class ClubBusinessImpl implements ClubBusiness {
     private PlayerRepository playerRepository;
     private StarPlayerRepository starPlayerRepository;
     private SeasonRepository seasonRepository;
+    private MegapigRegistryRepository megapigRegistryRepository;
 
     private Logger logger = LoggerFactory.getLogger(ClubBusinessImpl.class);
+
+    private static final int LAST_MEGAPIG_REGISTRIES_LIMIT = 5;
 
     public ClubBusinessImpl(
         BSClient bsClient,
@@ -57,7 +64,8 @@ public class ClubBusinessImpl implements ClubBusiness {
         TrophyRegistryRepository trophyRegistryRepository,
         PlayerRepository playerRepository,
         StarPlayerRepository starPlayerRepository,
-        SeasonRepository seasonRepository
+        SeasonRepository seasonRepository,
+        MegapigRegistryRepository megapigRegistryRepository
     ) {
         this.client = bsClient;
         this.modelMapper = modelMapper;
@@ -66,6 +74,7 @@ public class ClubBusinessImpl implements ClubBusiness {
         this.playerRepository = playerRepository;
         this.starPlayerRepository = starPlayerRepository;
         this.seasonRepository = seasonRepository;
+        this.megapigRegistryRepository = megapigRegistryRepository;
     }
 
     @Override
@@ -82,8 +91,9 @@ public class ClubBusinessImpl implements ClubBusiness {
             HttpResponse<String> response = client.getClub(tag);
             BSClub bsClub = objectMapper.readValue(response.body(), BSClub.class);
             club = modelMapper.map(bsClub, Club.class);
-            mapLastRegistriesToMembers(club.getMembers());
+            mapLastTrophyRegistriesToMembers(club.getMembers());
             mapStarBadgesToMembers(club.getMembers());
+            mapLastMegapigsToMembers(club.getMembers());
             logger.info("Successfully retrieved club information with tag {}", tag);
         } catch (BsNotFoundException e) {
             logger.error("There was an error while getting the club {}. Club not found", tag);
@@ -136,10 +146,45 @@ public class ClubBusinessImpl implements ClubBusiness {
         }
     }
 
+    @Override
+    public void newMegapigReport(NewMegapigRequest request) {
+        logger.info("Creating new megapig report");
+
+        try {
+
+            for (NewMegapigRequestMember member : request.getMembers()) {
+                JPAPlayer jpaPlayer = playerRepository.findPlayerByTag(member.getPlayerTag()).orElse(null);
+
+                if (jpaPlayer == null) {
+                    JPAPlayer newPlayer = new JPAPlayer(member.getPlayerTag());
+                    jpaPlayer = playerRepository.save(newPlayer);
+                }
+
+                JPAMegapigRegistry newRegistry = new JPAMegapigRegistry(jpaPlayer, member.getStatus());
+                megapigRegistryRepository.save(newRegistry);
+
+            }
+
+            logger.info("Successfully created the megapig report");
+        } catch (Exception e) {
+            logger.error("There was an error while creating the megapig report. Generic error occured. Check stack trace");
+            throw new BusinessException();
+        }
+
+    }
+
     //#region Private methods
 
+    private void mapLastMegapigsToMembers(List<ClubMember> members) {
+        List<JPAMegapigRegistry> megaPigRegistries = megapigRegistryRepository.findAllSorted();
+        for (ClubMember member : members) {
+            List<JPAMegapigRegistry> lastRegistries = megaPigRegistries.stream().filter(x -> x.getPlayer().getTag().equals(member.getTag())).limit(LAST_MEGAPIG_REGISTRIES_LIMIT).toList();
+            member.setLastMegapigs(lastRegistries.stream().map(x -> x.getStatus()).toList());
+        }
+    }
+
     private void createWeeklyStarPlayers(List<ClubMember> members, int clubIndex, int season, int week) {
-        mapLastRegistriesToMembers(members);
+        mapLastTrophyRegistriesToMembers(members);
         members.sort((m1, m2) -> m2.getLastRegistry() - m1.getLastRegistry());
         ClubMember clubMemberWithMostProgression = members.getFirst();
 
@@ -150,7 +195,7 @@ public class ClubBusinessImpl implements ClubBusiness {
         starPlayerRepository.save(newStarPlayer);
     }
 
-    private void mapLastRegistriesToMembers(List<ClubMember> members) {
+    private void mapLastTrophyRegistriesToMembers(List<ClubMember> members) {
         List<JPATrophyRegistry> trophyRegistries = trophyRegistryRepository.findAllSorted();
         for (ClubMember clubMember : members) {
             List<JPATrophyRegistry> memberRegistries = trophyRegistries.stream().filter(x -> x.getPlayer().getTag().equals(clubMember.getTag().replace("#", ""))).toList();

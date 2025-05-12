@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.business.*;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
+import com.pablosgon.mortismaycry.webapi.repositories.MegapigRegistryRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.PlayerRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.SeasonRepository;
 import com.pablosgon.mortismaycry.webapi.repositories.StarPlayerRepository;
@@ -22,7 +23,8 @@ public class BusinessConfig {
         TrophyRegistryRepository trophyRegistryRepository,
         PlayerRepository playerRepository,
         StarPlayerRepository starPlayerRepository,
-        SeasonRepository seasonRepository
+        SeasonRepository seasonRepository,
+        MegapigRegistryRepository megapigRegistryRepository
     ) {
         return new ClubBusinessImpl(client,
             mapper,
@@ -30,7 +32,8 @@ public class BusinessConfig {
             trophyRegistryRepository,
             playerRepository,
             starPlayerRepository,
-            seasonRepository
+            seasonRepository,
+            megapigRegistryRepository
         );
     }
 

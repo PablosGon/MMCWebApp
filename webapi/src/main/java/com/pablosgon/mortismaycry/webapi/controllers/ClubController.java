@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pablosgon.mortismaycry.webapi.business.ClubBusiness;
 import com.pablosgon.mortismaycry.webapi.entities.models.Club;
+import com.pablosgon.mortismaycry.webapi.entities.requests.NewMegapigRequest;
 import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,11 @@ public class ClubController {
         business.updateMembers(request);
         return ResponseEntity.ok().build();
     }
-    
+
+    @PostMapping("/club/newMegaPig")
+    public ResponseEntity<String> newMegaPig(@RequestBody NewMegapigRequest request) {
+        business.newMegapigReport(request);
+        return ResponseEntity.ok().build();
+    }
 
 }
