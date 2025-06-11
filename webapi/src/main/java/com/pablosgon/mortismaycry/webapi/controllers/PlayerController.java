@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pablosgon.mortismaycry.webapi.business.PlayerBusiness;
-import com.pablosgon.mortismaycry.webapi.entities.models.Player;
-import com.pablosgon.mortismaycry.webapi.entities.requests.CreatePlayerRequest;
 import com.pablosgon.mortismaycry.webapi.exceptions.BsNotFoundException;
+import com.pablosgon.mortismaycry.webapi.models.entities.Player;
+import com.pablosgon.mortismaycry.webapi.models.requests.CreatePlayerRequest;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

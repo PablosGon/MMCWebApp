@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pablosgon.mortismaycry.webapi.business.SeasonBusiness;
-import com.pablosgon.mortismaycry.webapi.entities.models.Season;
-import com.pablosgon.mortismaycry.webapi.entities.requests.CreateSeasonRequest;
+import com.pablosgon.mortismaycry.webapi.models.entities.Season;
+import com.pablosgon.mortismaycry.webapi.models.requests.CreateSeasonRequest;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

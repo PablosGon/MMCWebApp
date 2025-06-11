@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPASeason;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPASeason;
 
 public interface SeasonRepository extends JpaRepository<JPASeason, Integer> {
     

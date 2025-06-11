@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPATrophyRegistry;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPATrophyRegistry;
 
 public interface TrophyRegistryRepository extends JpaRepository<JPATrophyRegistry, Integer>{
 

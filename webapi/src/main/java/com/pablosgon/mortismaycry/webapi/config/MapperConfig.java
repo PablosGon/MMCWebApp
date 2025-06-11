@@ -7,17 +7,17 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pablosgon.mortismaycry.webapi.entities.models.ClubMember;
-import com.pablosgon.mortismaycry.webapi.entities.models.Player;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarSeasonPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
-import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.ClubMember;
+import com.pablosgon.mortismaycry.webapi.models.entities.Player;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarSeasonPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarWeekPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSClubMember;
+import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarSeasonPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarWeekPlayer;
 
 
 @Configuration

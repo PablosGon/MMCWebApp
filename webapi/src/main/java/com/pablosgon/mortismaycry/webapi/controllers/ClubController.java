@@ -3,9 +3,9 @@ package com.pablosgon.mortismaycry.webapi.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pablosgon.mortismaycry.webapi.business.ClubBusiness;
-import com.pablosgon.mortismaycry.webapi.entities.models.Club;
-import com.pablosgon.mortismaycry.webapi.entities.requests.NewMegapigRequest;
-import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
+import com.pablosgon.mortismaycry.webapi.models.entities.Club;
+import com.pablosgon.mortismaycry.webapi.models.requests.CreateMegapigReportRequest;
+import com.pablosgon.mortismaycry.webapi.models.requests.UpdateMembersRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +45,9 @@ public class ClubController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/club/newMegaPig")
-    public ResponseEntity<String> newMegaPig(@RequestBody NewMegapigRequest request) {
-        business.newMegapigReport(request);
+    @PostMapping("/reportMegapig")
+    public ResponseEntity<String> createMegapigReport(@RequestBody CreateMegapigReportRequest request) {
+        business.createMegapigReport(request);
         return ResponseEntity.ok().build();
     }
 

@@ -4,7 +4,7 @@ import { TrophyChart } from "@/components/player/trophy-chart.component";
 import ErrorComponent from "@/components/shared/error.component";
 import LoadingComponent from "@/components/shared/loading.component";
 import { Player } from "@/models/player.model";
-import { getOrCreatePlayer } from "@/service/player.service";
+import { playerService } from "@/service/player.service";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -21,7 +21,7 @@ export default function PlayerPage() {
     useEffect(() => {
         const fetchPlayer = async() => {
             try {
-                const data = await getOrCreatePlayer(playerid);
+                const data = await playerService.getOrCreatePlayer(playerid);
                 setPlayer(data);    
             } catch (error) {
                 console.log(error);

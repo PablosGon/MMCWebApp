@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAPlayer;
 
 
 public interface PlayerRepository extends JpaRepository<JPAPlayer, String> {

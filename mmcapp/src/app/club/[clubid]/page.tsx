@@ -7,7 +7,7 @@ import { CLUBS } from "@/constants/clubs-names.constant";
 import { ClubMembersOrderBy } from "@/enums/club-members-orderby.enum";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
-import { getClub } from "@/service/club.service";
+import { clubService } from "@/service/club.service";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -38,7 +38,7 @@ export default function ClubPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data: Club = await getClub(CLUBS[clubId].id);
+        const data: Club = await clubService.getClub(CLUBS[clubId].id);
         setClub(data);  
       } catch {
         setError(true);
@@ -58,7 +58,7 @@ export default function ClubPage() {
     )
   } else {
     return (
-      <div>
+      <div className="flex flex-col gap-5">
         <Link href="/" className="text-lg">← Volver</Link>
         <header className="container bg-gray-800 p-10 rounded-4xl flex flex-wrap md:flex-nowrap items-center gap-10 justify-center lg:justify-start">
             <Image src={"https://cdn.brawlify.com/club-badges/regular/" + club?.badgeId + ".png"} alt="Club Badge" width={500} height={500} className="w-50"/>
@@ -67,7 +67,12 @@ export default function ClubPage() {
               <p className="text-sm sm:text-md md:text-lg lg:text-xl">{club?.description}</p>
             </div>
         </header>
-        <section className="container mt-10">
+        <section className="self-center">
+          <Link href={`/club/${clubId}/megapigReport`} className="bg-gray-600 rounded-xl p-3 w-20 h-12">
+            Registrar resultados de megahucha
+          </Link>
+        </section>
+        <section className="container">
           <header className="flex items-center">
             <h2 className="text-2xl md:text5xl">Miembros</h2>
             <label className="ml-auto text-end flex flex-row">

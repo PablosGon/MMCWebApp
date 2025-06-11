@@ -12,28 +12,28 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pablosgon.mortismaycry.webapi.clients.BSClient;
 import com.pablosgon.mortismaycry.webapi.constants.ClubConstants;
-import com.pablosgon.mortismaycry.webapi.entities.models.Club;
-import com.pablosgon.mortismaycry.webapi.entities.models.ClubMember;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarBadgeCase;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarLegend;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarMaster;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarSeasonPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.StarWeekPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClub;
-import com.pablosgon.mortismaycry.webapi.entities.models.bs.BSClubMember;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAMegapigRegistry;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPASeason;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarLegend;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarMaster;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarSeasonPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPAStarWeekPlayer;
-import com.pablosgon.mortismaycry.webapi.entities.models.jpa.JPATrophyRegistry;
-import com.pablosgon.mortismaycry.webapi.entities.requests.NewMegapigRequest;
-import com.pablosgon.mortismaycry.webapi.entities.requests.NewMegapigRequestMember;
-import com.pablosgon.mortismaycry.webapi.entities.requests.UpdateMembersRequest;
 import com.pablosgon.mortismaycry.webapi.exceptions.BusinessException;
+import com.pablosgon.mortismaycry.webapi.models.entities.Club;
+import com.pablosgon.mortismaycry.webapi.models.entities.ClubMember;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarBadgeCase;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarLegend;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarMaster;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarSeasonPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.StarWeekPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSClub;
+import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSClubMember;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAMegapigRegistry;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPASeason;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarLegend;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarMaster;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarSeasonPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAStarWeekPlayer;
+import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPATrophyRegistry;
+import com.pablosgon.mortismaycry.webapi.models.requests.CreateMegapigReportRequest;
+import com.pablosgon.mortismaycry.webapi.models.requests.MegapigMember;
+import com.pablosgon.mortismaycry.webapi.models.requests.UpdateMembersRequest;
 import com.pablosgon.mortismaycry.webapi.exceptions.BsForbiddenException;
 import com.pablosgon.mortismaycry.webapi.exceptions.BsNotFoundException;
 import com.pablosgon.mortismaycry.webapi.repositories.MegapigRegistryRepository;
@@ -147,12 +147,12 @@ public class ClubBusinessImpl implements ClubBusiness {
     }
 
     @Override
-    public void newMegapigReport(NewMegapigRequest request) {
+    public void createMegapigReport(CreateMegapigReportRequest request) {
         logger.info("Creating new megapig report");
 
         try {
 
-            for (NewMegapigRequestMember member : request.getMembers()) {
+            for (MegapigMember member : request.getMembers()) {
                 JPAPlayer jpaPlayer = playerRepository.findPlayerByTag(member.getPlayerTag()).orElse(null);
 
                 if (jpaPlayer == null) {
