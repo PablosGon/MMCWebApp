@@ -67,11 +67,16 @@ export default function ClubPage() {
               <p className="text-sm sm:text-md md:text-lg lg:text-xl">{club?.description}</p>
             </div>
         </header>
-        <section className="self-center">
-          <Link href={`/club/${clubId}/megapigReport`} className="bg-gray-600 rounded-xl p-3 w-20 h-12">
-            Registrar resultados de megahucha
-          </Link>
-        </section>
+        {
+          sessionStorage.getItem('admin') ? 
+            <section className="self-center">
+              <Link href={`/club/${clubId}/megapigReport`} className="bg-gray-600 rounded-xl p-3 w-20 h-12">
+                Registrar resultados de megahucha
+              </Link>
+            </section>
+          :
+          <></>
+        }
         <section className="container">
           <header className="flex items-center">
             <h2 className="text-2xl md:text5xl">Miembros</h2>

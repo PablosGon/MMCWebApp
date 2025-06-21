@@ -178,8 +178,8 @@ public class ClubBusinessImpl implements ClubBusiness {
     private void mapLastMegapigsToMembers(List<ClubMember> members) {
         List<JPAMegapigRegistry> megaPigRegistries = megapigRegistryRepository.findAllSorted();
         for (ClubMember member : members) {
-            List<JPAMegapigRegistry> lastRegistries = megaPigRegistries.stream().filter(x -> x.getPlayer().getTag().equals(member.getTag())).limit(LAST_MEGAPIG_REGISTRIES_LIMIT).toList();
-            member.setLastMegapigs(lastRegistries.stream().map(x -> x.getStatus()).toList());
+            List<JPAMegapigRegistry> lastRegistries = megaPigRegistries.stream().filter(x -> x.getPlayer().getTag().equals(member.getTag().replace("#", ""))).limit(LAST_MEGAPIG_REGISTRIES_LIMIT).toList();
+            member.setLastMegapigs(lastRegistries.stream().map(x -> x.getStatus().ordinal()).toList());
         }
     }
 

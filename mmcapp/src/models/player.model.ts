@@ -1,3 +1,4 @@
+import { ClubEventRegistry } from "./club-event-registry.model";
 import { StarBadgeCase } from "./star-badge-case.model";
 import { TrophyRegistry } from "./trophy-registry.model";
 
@@ -13,4 +14,5 @@ export interface Player {
     trophyRegistries: TrophyRegistry[],
     seasonTrophyProgress: number[],
     badges: StarBadgeCase,
+    clubEventRegistries: ClubEventRegistry[]
 }

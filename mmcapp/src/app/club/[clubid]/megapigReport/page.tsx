@@ -3,6 +3,7 @@
 import ErrorComponent from "@/components/shared/error.component";
 import LoadingComponent from "@/components/shared/loading.component";
 import { CLUBS } from "@/constants/clubs-names.constant";
+import { MegapigStatusColors } from "@/constants/megapig-status-colors.constant";
 import { MegapigStatus } from "@/enums/megapig-status.enum";
 import { ClubMember } from "@/models/club-member.model";
 import { Club } from "@/models/club.model";
@@ -10,8 +11,7 @@ import { MemberMegapigReport } from "@/models/member-megapig-report.model";
 import { clubService } from "@/service/club.service";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams , useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function MegapigReportPage() {
@@ -27,13 +27,6 @@ export default function MegapigReportPage() {
     const [error, setError] = useState<boolean>(false);
 
     const [reports, setReports] = useState<MemberMegapigReport[]>([]);
-
-    const statusColors = [
-        { status: MegapigStatus.Compliant, color: 'bg-green-300', text: 'Correcto', textColor: 'text-green-300' },
-        { status: MegapigStatus.Minor_Penalty, color: 'bg-yellow-300', text: 'Penalización leve', textColor: 'text-yellow-300' },
-        { status: MegapigStatus.Major_Penalty, color: 'bg-red-400', text: 'Penalización grave', textColor: 'text-red-400' },
-        { status: MegapigStatus.No_Penalty, color: 'bg-gray-300', text: 'Sin penalización', textColor: 'text-gray-300' },
-    ]
 
     useEffect(() => {
         const fetchData = async () => {
@@ -61,6 +54,7 @@ export default function MegapigReportPage() {
 
         try {
             await clubService.postMegapigReport(reports);
+            sessionStorage.removeItem(club!.tag)
             router.push(`/club/${clubid}`);
         } catch {
             setError(true);
@@ -89,7 +83,7 @@ export default function MegapigReportPage() {
                 <ul className="flex flex-wrap gap-3">
                 {
                     club?.members.map((member: ClubMember, index: number) => (
-                        <li key={index} className="bg-gray-800 p-3 rounded-2xl flex-1/4">
+                        <li key={member.tag} className="bg-gray-800 p-3 rounded-2xl flex-1/4">
                             <div className="flex flex-row items-center gap-3">
                                 <div className="text-2xl w-5">
                                     {index + 1}
@@ -99,7 +93,7 @@ export default function MegapigReportPage() {
                                     <h2 className="text-md lg:text-lg">{member.name}</h2>
                                     <form className="flex flex-row gap-2">
                                         {
-                                            statusColors.map((status: { status: MegapigStatus, color: string, text: string }) => (
+                                            MegapigStatusColors.map((status: { status: MegapigStatus, color: string, text: string }) => (
                                                 <label key={`Member ${index} ${status.status}`}>
                                                     <input 
                                                         type="radio" 
@@ -123,8 +117,8 @@ export default function MegapigReportPage() {
                                             ))
                                         }
                                     </form>
-                                    <span className={`text-sm ${statusColors[reports[index].status.valueOf()].textColor}`}>
-                                        { statusColors[reports[index].status.valueOf()].text }
+                                    <span className={`text-sm ${MegapigStatusColors[reports[index].status.valueOf()].textColor}`}>
+                                        { MegapigStatusColors[reports[index].status.valueOf()].text }
                                     </span>
                                 </div>
                             </div>

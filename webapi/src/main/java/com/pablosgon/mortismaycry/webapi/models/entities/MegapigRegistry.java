@@ -2,20 +2,21 @@ package com.pablosgon.mortismaycry.webapi.models.entities;
 
 import java.time.LocalDateTime;
 
-import com.pablosgon.mortismaycry.webapi.enums.MegapigStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MegapigRegistry {
            
-    private MegapigStatus status;
+    private int status;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateTime;
 
 
-    public MegapigStatus getStatus() {
+    public int getStatus() {
         return this.status;
     }
 
-    public void setStatus(MegapigStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

@@ -20,6 +20,8 @@ export function TrophyChart(params:Readonly<{player:Player}>) {
     const trophyUpgrades = player.seasonTrophyProgress;
     const trophyRegistries = player.trophyRegistries.filter(x => x.week != 0);
 
+    console.log("Trophy Registries:", player.trophyRegistries.filter(x => x.week != 0))
+
     console.log([0, ...trophyUpgrades], trophyUpgrades)
 
     if(trophyUpgrades.length == 0) {

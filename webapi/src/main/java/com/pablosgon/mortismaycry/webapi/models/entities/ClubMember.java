@@ -14,7 +14,7 @@ public class ClubMember {
     private String nameColor;
     private int lastRegistry;
     private StarBadgeCase starBadgeCase;
-    private List<MegapigStatus> lastMegapigs;
+    private List<Integer> lastMegapigs;
 
 
     public int getIconId() {
@@ -81,11 +81,11 @@ public class ClubMember {
         this.starBadgeCase = starBadgeCase;
     }
 
-    public List<MegapigStatus> getLastMegapigs() {
+    public List<Integer> getLastMegapigs() {
         return this.lastMegapigs;
     }
 
-    public void setLastMegapigs(List<MegapigStatus> lastMegapigs) {
+    public void setLastMegapigs(List<Integer> lastMegapigs) {
         this.lastMegapigs = lastMegapigs;
     }
 

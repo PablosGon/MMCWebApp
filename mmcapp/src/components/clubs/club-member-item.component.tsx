@@ -1,11 +1,15 @@
 import { ClubMember } from "@/models/club-member.model";
 import Image from "next/image";
 import { ClubMemberBadges } from "./club-member-badges.component";
+import { MegapigStatus } from "@/enums/megapig-status.enum";
+import { MegapigStatusColors } from "@/constants/megapig-status-colors.constant";
 
 export default function ClubMemberItem(params: Readonly<{ member: ClubMember, index:number }>) {
 
     const member = params.member;
     const index = params.index;
+
+    
 
     return (
         <div className="flex flex-row items-center gap-3">
@@ -25,6 +29,30 @@ export default function ClubMemberItem(params: Readonly<{ member: ClubMember, in
                     } 
                 </p>
                 <ClubMemberBadges starBadgeCase={member.starBadgeCase} />
+                {
+                    sessionStorage.getItem('admin') ?
+                        <div className="flex flex-row items-center gap-2">
+                            <p>Megahucha:</p>
+                            <ul className="flex flex-row gap-1">
+                                {
+                                    member.lastMegapigs.map((status: MegapigStatus, index) => (
+                                        <li key={member.tag + index}>
+                                            <div
+                                                className={`
+                                                w-3 h-3 rounded-sm
+                                                ${MegapigStatusColors[status].color}
+                                                peer-checked:opacity-100
+                                                transition-colors
+                                                `}
+                                            ></div>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        </div>
+                    :
+                        <></>
+                }
             </div>
             <p className="ml-auto">→</p>
         </div>

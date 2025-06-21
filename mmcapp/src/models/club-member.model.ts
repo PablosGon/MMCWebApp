@@ -1,3 +1,4 @@
+import { MegapigStatus } from "@/enums/megapig-status.enum";
 import { StarBadgeCase } from "./star-badge-case.model";
 
 export interface ClubMember {
@@ -8,4 +9,5 @@ export interface ClubMember {
     role: string,
     lastRegistry: number,
     starBadgeCase: StarBadgeCase,
+    lastMegapigs: MegapigStatus[],
 }
