@@ -82,8 +82,8 @@ export default function MegapigReportPage() {
                 </header>
                 <ul className="flex flex-wrap gap-3">
                 {
-                    club?.members.map((member: ClubMember, index: number) => (
-                        <li key={member.tag} className="bg-gray-800 p-3 rounded-2xl flex-1/4">
+                    club?.members.sort((a, b) => b.name.localeCompare(a.name)).map((member: ClubMember, index: number) => (
+                        <li key={member.tag} className="bg-gray-800 p-3 rounded-2xl flex-1/4 min-w-70">
                             <div className="flex flex-row items-center gap-3">
                                 <div className="text-2xl w-5">
                                     {index + 1}
