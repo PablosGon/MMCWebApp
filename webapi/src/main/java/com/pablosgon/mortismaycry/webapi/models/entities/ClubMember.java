@@ -2,8 +2,6 @@ package com.pablosgon.mortismaycry.webapi.models.entities;
 
 import java.util.List;
 
-import com.pablosgon.mortismaycry.webapi.enums.MegapigStatus;
-
 public class ClubMember {
     
     private int iconId;

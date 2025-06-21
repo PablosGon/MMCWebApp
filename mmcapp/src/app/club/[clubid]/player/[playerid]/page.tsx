@@ -4,9 +4,6 @@ import { PlayerAchievementsComponent } from "@/components/player/player-achievem
 import { TrophyChart } from "@/components/player/trophy-chart.component";
 import ErrorComponent from "@/components/shared/error.component";
 import LoadingComponent from "@/components/shared/loading.component";
-import { MegapigStatusColors } from "@/constants/megapig-status-colors.constant";
-import { MegapigStatus } from "@/enums/megapig-status.enum";
-import { ClubEventRegistry } from "@/models/club-event-registry.model";
 import { Player } from "@/models/player.model";
 import { playerService } from "@/service/player.service";
 import Image from "next/image";
