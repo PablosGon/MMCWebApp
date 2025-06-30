@@ -1,3 +1,4 @@
+import { CLUBS } from "@/constants/clubs-names.constant";
 import { StarBadgeCase } from "@/models/star-badge-case.model";
 import Image from "next/image";
 import { useState } from "react";
@@ -35,7 +36,10 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
                                             </p>
                                             <p className="text-sm text-amber-400">
                                                 +{badge.trophies} trofeos
-                                            </p> 
+                                            </p>
+                                            <p className="text-sm text-center">
+                                                {CLUBS[badge.clubId].name}
+                                            </p>
                                         </li>
                                     ))
                                 }
@@ -65,7 +69,10 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
                                             </p>
                                             <p className="text-sm text-emerald-400 text-center">
                                                 {badge.trophies} trofeos totales
-                                            </p> 
+                                            </p>
+                                            <p className="text-sm text-center">
+                                                {CLUBS[badge.clubId].name}
+                                            </p>
                                         </li>
                                     ))
                                 }
@@ -96,6 +103,9 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
                                             <p className="text-sm text-blue-300 text-center">
                                                 {badge.rankedPoints} puntos
                                             </p> 
+                                            <p className="text-sm text-center">
+                                                {CLUBS[badge.clubId].name}
+                                            </p>
                                         </li>
                                     ))
                                 }
@@ -129,6 +139,9 @@ export function PlayerAchievementsComponent(params: Readonly<{ badges: StarBadge
                                             <p className="text-sm text-amber-400 text-center">
                                                 +{badge.trophies} trofeos
                                             </p> 
+                                            <p className="text-sm text-center">
+                                                {CLUBS[badge.clubId].name}
+                                            </p>                                        
                                         </li>
                                     ))
                                 }
