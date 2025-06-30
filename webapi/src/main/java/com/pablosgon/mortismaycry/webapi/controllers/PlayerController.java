@@ -28,21 +28,12 @@ public class PlayerController {
 
     @GetMapping("/player/{playerTag}")
     public ResponseEntity<Player> getPlayer(@PathVariable String playerTag, @RequestHeader String isAdmin){
-        try {
-            Player player = business.getPlayer(playerTag, Boolean.parseBoolean(isAdmin));
+        Player player = business.getPlayer(playerTag, Boolean.parseBoolean(isAdmin));
 
-            if(player != null) {
-                return ResponseEntity.ok(player);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        } catch(BsNotFoundException e) {
+        if(player != null) {
+            return ResponseEntity.ok(player);
+        } else {
             return ResponseEntity.notFound().build();
-        } catch(Exception e){
-            return ResponseEntity.internalServerError().build();
         }
     }
 

@@ -47,7 +47,12 @@ public class ClubController {
     }
 
     @PostMapping("/reportMegapig")
-    public ResponseEntity<String> createMegapigReport(@RequestBody CreateMegapigReportRequest request) {
+    public ResponseEntity<String> createMegapigReport(@RequestBody CreateMegapigReportRequest request, @RequestHeader String isAdmin) {
+
+        if (!Boolean.parseBoolean(isAdmin)) {
+            return ResponseEntity.badRequest().build();
+        }
+
         business.createMegapigReport(request);
         return ResponseEntity.ok().build();
     }
