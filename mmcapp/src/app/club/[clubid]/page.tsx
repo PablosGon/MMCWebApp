@@ -48,8 +48,6 @@ export default function ClubPage() {
     fetchData();
   }, [clubId])
 
-  console.log(members?.map(x => { return [x.name, x.starBadgeCase.grandStarPlayerBadges.filter(x => x.clubId === clubId).length, x.starBadgeCase.grandStarPlayerBadges.length] }))
-
   if (error) {
     return (
       <div>

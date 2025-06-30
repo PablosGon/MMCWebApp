@@ -6,8 +6,6 @@ export function SeasonStarBoardComponent(params: Readonly<{season: Season}>) {
 
     const season = params.season;
 
-    console.log(season);
-
     return (
         <div className="flex flex-col gap-5">
             <h1 className="text-4xl">

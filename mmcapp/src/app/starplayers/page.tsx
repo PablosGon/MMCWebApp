@@ -17,8 +17,7 @@ export default function StarPlayersPage() {
             try {
                 const data = await getSeasons();
                 setSeasons(data);    
-            } catch (error) {
-                console.log(error);
+            } catch {
                 setError(true);
             }
         }
@@ -65,7 +64,6 @@ export default function StarPlayersPage() {
 function seasonIsNotNew(season:Season) {
     let isNew = true;
     season.starPlayersByClub.forEach((club) => {
-        console.log(club.weeklyStarPlayers);
         if(club.weeklyStarPlayers.length > 0) {
             isNew = false;
         }

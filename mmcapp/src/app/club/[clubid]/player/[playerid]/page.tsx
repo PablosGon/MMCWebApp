@@ -27,10 +27,8 @@ export default function PlayerPage() {
         const fetchPlayer = async() => {
             try {
                 const data = await playerService.getOrCreatePlayer(playerid);
-                console.log(Math.min(...data.trophyRegistries.map(tr => tr.trophies)), Math.max(...data.trophyRegistries.map(tr => tr.trophies)))
                 setPlayer(data);    
-            } catch (error) {
-                console.log(error);
+            } catch {
                 setError(true);
             }
         }
