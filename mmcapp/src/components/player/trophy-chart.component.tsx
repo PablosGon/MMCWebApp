@@ -127,7 +127,18 @@ export function TrophyChart(params:Readonly<{player:Player}>) {
                                 }
                             }
                         }}/>
-                        <p className="text-xl">Total: <span className="text-amber-400">+{trophyUpgrades.reduce((sum: number, value: number) => sum + value, 0)}</span>🏆</p>
+                        {
+                            <ul className="flex flex-wrap gap-x-5 justify-center">
+                                {
+                                    trophyUpgrades.map((tu, index) => (
+                                        <li key={index}>
+                                            <p className="text-sm sm:text-md">Semana {index+1}: <span className="text-amber-400">{tu >= 0 ? '+' : ''}{tu}</span>🏆</p>
+                                        </li>
+                                    ))
+                                }
+                            </ul>
+                        }
+                        <p className="text-2xl self-center">Total: <span className="text-amber-400">+{trophyUpgrades.reduce((sum: number, value: number) => sum + value, 0)}</span>🏆</p>
                     </div>
             }
             
