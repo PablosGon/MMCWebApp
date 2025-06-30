@@ -13,6 +13,7 @@ import com.pablosgon.mortismaycry.webapi.models.requests.CreatePlayerRequest;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
@@ -26,15 +27,16 @@ public class PlayerController {
     }
 
     @GetMapping("/player/{playerTag}")
-    public ResponseEntity<Player> getPlayer(@PathVariable String playerTag){
+    public ResponseEntity<Player> getPlayer(@PathVariable String playerTag, @RequestHeader String isAdmin){
         try {
-            Player player = business.getPlayer(playerTag);
+            Player player = business.getPlayer(playerTag, Boolean.parseBoolean(isAdmin));
 
             if(player != null) {
                 return ResponseEntity.ok(player);
             } else {
                 return ResponseEntity.notFound().build();
             }
+
         } catch(IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         } catch(BsNotFoundException e) {

@@ -4,6 +4,7 @@ import { PlayerAchievementsComponent } from "@/components/player/player-achievem
 import { TrophyChart } from "@/components/player/trophy-chart.component";
 import ErrorComponent from "@/components/shared/error.component";
 import LoadingComponent from "@/components/shared/loading.component";
+import { CLUBS } from "@/constants/clubs-names.constant";
 import { Player } from "@/models/player.model";
 import { playerService } from "@/service/player.service";
 import Image from "next/image";
@@ -12,6 +13,9 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function PlayerPage() {
+
+    const FIRST_SEASON = 36;
+    const FIRST_WEEK = 0;
 
     const { playerid } = useParams<{ playerid: string }>();
     const { clubid } = useParams<{ clubid: string }>();
@@ -33,15 +37,20 @@ export default function PlayerPage() {
         fetchPlayer();
     }, [playerid])
 
-    console.log(player?.clubEventRegistries[0].dateTime)
-
     if (error) {
         return (
-            <ErrorComponent/>
+            <div>
+                <Link href={`/club/${clubid}`} className="text-lg">← Volver</Link>
+                <ErrorComponent />
+            </div>
+
         )
-    } else if (!player){
+    } else if (!player) {
         return (
-            <LoadingComponent/>
+            <div>
+                <Link href={`/club/${clubid}`} className="text-lg">← Volver</Link>
+                <LoadingComponent />
+            </div>
         )
     } else {
         return (
@@ -53,6 +62,11 @@ export default function PlayerPage() {
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl">{player.name}</h1>
                         <h2 className="text-xl sm:text-xl md:text-2xl lg:text-3xl">{player.trophies} trofeos</h2>
                         <p className="text-lg sm:text-md md:text-lg lg:text-xl">{player.clubName}</p>
+                        <p className="text-sm sm:text-md md:text-md lg:text-lg">Main {CLUBS[parseInt(clubid)].brawler} desde:
+                            {
+                                ` ${player.trophyRegistries[0].season === FIRST_SEASON && player.trophyRegistries[0].week === FIRST_WEEK ? "antes de la t" : "T"}emporada ${player.trophyRegistries[0].season}`   
+                            }
+                        </p>
                     </div>
                 </header>
                 <div className="container flex flex-wrap gap-5">
@@ -65,11 +79,14 @@ export default function PlayerPage() {
                         <PlayerAchievementsComponent badges={player.badges} />
                     </section>
                     {
-                        sessionStorage.getItem('admin') &&
+                        sessionStorage.getItem('admin') ?
                             <section className="container bg-gray-800 p-10 rounded-4xl justify-items-center lg:justify-start mt-5 flex-1/4">
                                 <h2 className="text-2xl sm:text-2xl md:text-3xl text-center">Registro de megahucha</h2>
                                 <MegapigRegistriesComponent player={player} />
                             </section>
+                        :
+                            <></>
+                        
                     }
 
                 </div>

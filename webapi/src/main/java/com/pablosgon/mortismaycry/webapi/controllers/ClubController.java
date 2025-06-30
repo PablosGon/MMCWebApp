@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 
@@ -29,8 +30,8 @@ public class ClubController {
     }
 
     @GetMapping("/club/{clubTag}")
-    public ResponseEntity<Club> getClub(@PathVariable String clubTag){
-        Club club = business.getClub(clubTag);
+    public ResponseEntity<Club> getClub(@PathVariable String clubTag, @RequestHeader String isAdmin){
+        Club club = business.getClub(clubTag, Boolean.parseBoolean(isAdmin));
 
         if(club != null) {
             return new ResponseEntity<>(club, HttpStatus.OK);

@@ -18,16 +18,22 @@ class PlayerService {
                 return player;
             } catch (error) {
                 const err = error as { response: Response };
+
                 if(err.response.status === 404) {
                     return await this.postPlayer(playerTag);
                 }
+                
                 throw error;
             }
         }
     }
 
     private async getPlayer(playerTag: string): Promise<Player> {
-        const response = await fetch(this.apiUrl + `player/${playerTag}`);
+        const response = await fetch(this.apiUrl + `player/${playerTag}`, {
+            headers: {
+                "isAdmin": sessionStorage.getItem('admin') ?? 'false',
+            }
+        });
 
         if (!response.ok) {
             throw new Error(`API Error: ${response.status}`);

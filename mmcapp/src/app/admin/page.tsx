@@ -10,6 +10,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     const setAdminRights = () => {
+      sessionStorage.clear();
       sessionStorage.setItem('admin', 'true');
       router.push('/');
     }

@@ -4,6 +4,6 @@ import com.pablosgon.mortismaycry.webapi.models.entities.Player;
 
 public interface PlayerBusiness {
     
-    public Player getPlayer(String tag);
+    public Player getPlayer(String tag, boolean isAdmin);
     public Player createPlayer(String tag);
 }

@@ -22,8 +22,8 @@ export default function ClubMemberItem(params: Readonly<{ member: ClubMember, in
                 <p className="text-sm lg:text-md">{member.role}</p>
                 <p className="text-sm lg:text-md">🏆{member.trophies}
                     {
-                        member.lastRegistry >= 0 ? 
-                            <span className="text-amber-400 ml-1">(+{member.lastRegistry})</span>
+                        member.firstSeason >= 0 ? 
+                            <span className="text-amber-400 ml-1">({member.lastRegistry > 0 && '+'}{member.lastRegistry})</span>
                             :
                             <span className="text-teal-300 ml-1">NEW</span> 
                     } 
@@ -31,24 +31,29 @@ export default function ClubMemberItem(params: Readonly<{ member: ClubMember, in
                 <ClubMemberBadges starBadgeCase={member.starBadgeCase} />
                 {
                     sessionStorage.getItem('admin') ?
-                        <div className="flex flex-row items-center gap-2">
-                            <p>Megahucha:</p>
-                            <ul className="flex flex-row gap-1">
-                                {
-                                    member.lastMegapigs.map((status: MegapigStatus, index) => (
-                                        <li key={member.tag + index}>
-                                            <div
-                                                className={`
-                                                w-3 h-3 rounded-sm
-                                                ${MegapigStatusColors[status].color}
-                                                peer-checked:opacity-100
-                                                transition-colors
-                                                `}
-                                            ></div>
-                                        </li>
-                                    ))
-                                }
-                            </ul>
+                        <div className="mt-1">
+                            <div className="flex flex-row items-center gap-2">
+                                <p className="text-sm">Megahucha:</p>
+                                <ul className="flex flex-row gap-1">
+                                    {
+                                        member.lastMegapigs.map((status: MegapigStatus, index) => (
+                                            <li key={member.tag + index}>
+                                                <div
+                                                    className={`
+                                                    w-3 h-3 rounded-sm
+                                                    ${MegapigStatusColors[status].color}
+                                                    peer-checked:opacity-100
+                                                    transition-colors
+                                                    `}
+                                                ></div>
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                            </div>
+                            <div>
+                                <p className="text-sm">Miembro desde: T{member.firstSeason}</p>
+                            </div>
                         </div>
                     :
                         <></>

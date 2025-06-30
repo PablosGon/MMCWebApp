@@ -30,24 +30,24 @@ export function MegapigRegistriesComponent(params: Readonly<{player: Player}>) {
     </aside>
     {
       <ul className="flex flex-wrap gap-3">
-          {
-              player.clubEventRegistries.map((cer: ClubEventRegistry, index) => (
-                  <li key={player.tag + index} className="flex gap-1 items-center">
-                      <div
-                          className={`
-                              w-10 h-10 rounded-sm
-                              ${MegapigStatusColors[cer.status].color}
-                              peer-checked:opacity-100
-                              transition-colors
-                          `}
-                      ></div>
-                      <p>
-                          {new Date(cer.dateTime).toLocaleDateString()}
-                      </p>
-                  </li>
-              ))
-              
-          }
+        {
+            player.clubEventRegistries.map((cer: ClubEventRegistry, index) => (
+                <li key={player.tag + index} className="flex gap-1 items-center">
+                    <div
+                        className={`
+                            w-10 h-10 rounded-sm
+                            ${MegapigStatusColors[cer.status].color}
+                            peer-checked:opacity-100
+                            transition-colors
+                        `}
+                    ></div>
+                    <p>
+                        {new Date(cer.dateTime).toLocaleDateString()}
+                    </p>
+                </li>
+            ))
+            
+        }
       </ul>
     }
     </div>

@@ -28,12 +28,20 @@ export default function StarPlayersPage() {
 
     if (error) {
         return (
-            <ErrorComponent/>
-        );
+            <div>
+                <Link href={`/`} className="text-lg">← Volver</Link>
+                <ErrorComponent />
+            </div>
+
+        )
     } else if (!seasons) {
         return (
-            <LoadingComponent/>
-        );
+            <div>
+                <Link href={`/`} className="text-lg">← Volver</Link>
+                <LoadingComponent />
+            </div>
+        )
+
     } else {
         return (
             <div className="max-w-250 m-auto">

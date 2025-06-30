@@ -54,7 +54,8 @@ export default function MegapigReportPage() {
 
         try {
             await clubService.postMegapigReport(reports);
-            sessionStorage.removeItem(club!.tag)
+            sessionStorage.clear();
+            sessionStorage.setItem('admin', 'true')
             router.push(`/club/${clubid}`);
         } catch {
             setError(true);
@@ -63,11 +64,18 @@ export default function MegapigReportPage() {
 
     if (error) {
         return (
-            <ErrorComponent />
+            <div>
+                <Link href={`/club/${clubid}`} className="text-lg">← Volver</Link>
+                <ErrorComponent />
+            </div>
+
         )
     } else if (loading) {
         return (
-            <LoadingComponent />
+            <div>
+                <Link href={`/club/${clubid}`} className="text-lg">← Volver</Link>
+                <LoadingComponent />
+            </div>
         )
     } else {
         return (

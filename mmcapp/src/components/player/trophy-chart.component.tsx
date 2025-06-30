@@ -48,6 +48,7 @@ export function TrophyChart(params:Readonly<{player:Player}>) {
                         value={TrophyChartMode.Season} 
                         onChange={() => setMode(TrophyChartMode.Season)} 
                         className="peer hidden"
+                        defaultChecked
                     />
                     <span className="block p-2 peer-checked:bg-gray-600 overflow-hidden rounded-l-xl">Temporada</span>
                 </label>
@@ -55,11 +56,11 @@ export function TrophyChart(params:Readonly<{player:Player}>) {
                     <input 
                         type="radio" 
                         name="mode"
-                        value={TrophyChartMode.History} 
+                        value={TrophyChartMode.History}
                         onChange={() => setMode(TrophyChartMode.History)} 
                         className="peer hidden"
                     />
-                    <span className="block p-2 peer-checked:bg-gray-600 overflow-hidden rounded-r-2xl">Histórico</span>
+                    <span className="block p-2 peer-checked:bg-gray-600 overflow-hidden rounded-r-xl">Histórico</span>
                 </label>
             </form>
 
@@ -73,8 +74,8 @@ export function TrophyChart(params:Readonly<{player:Player}>) {
                                 data: player.trophyRegistries.map(tr => tr.trophies),
                                 borderColor: '#fcc200',
                                 backgroundColor: '#fcc200',
-                                fill: true,
                                 animation: false,
+                                pointStyle: false,
                                 borderWidth: 7,
                             }
                         ],
@@ -95,35 +96,39 @@ export function TrophyChart(params:Readonly<{player:Player}>) {
                         }
                     }}/>
                 :
-                    <Line data={{
-                        labels: [0, ...trophyUpgrades].map((tr, week) => week == 0 ? 'Inicio' : `Semana ${week}`),
-                        datasets: [
-                            {
-                                label: 'Trophies',
-                                data: [0, ...trophyUpgrades],
-                                borderColor: '#fcc200',
-                                backgroundColor: '#fcc200',
-                                fill: true,
-                                animation: false,
-                                borderWidth: 7,
-                            }
-                        ],
-                    }} options={{
-                        responsive: true,
-                        scales: {
-                            x: {
+                    <div className="flex flex-col items-center">
+                        <Line data={{
+                            labels: [0, ...trophyUpgrades].map((tr, week) => week == 0 ? 'Inicio' : `Semana ${week}`),
+                            datasets: [
+                                {
+                                    label: 'Trophies',
+                                    data: [0, ...trophyUpgrades],
+                                    borderColor: '#fcc200',
+                                    backgroundColor: '#fcc200',
+                                    fill: true,
+                                    animation: false,
+                                    pointStyle: false,
+                                    borderWidth: 7,
+                                }
+                            ],
+                        }} options={{
+                            responsive: true,
+                            scales: {
+                                x: {
+                                },
+                                y: {
+                                    min: 0,
+                                    max: Math.max(...trophyUpgrades, 2000)
+                                }
                             },
-                            y: {
-                                min: 0,
-                                max: Math.max(...trophyUpgrades, 2000)
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
                             }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }}/>
+                        }}/>
+                        <p className="text-xl">Total: <span className="text-amber-400">+{trophyUpgrades.reduce((sum: number, value: number) => sum + value, 0)}</span>🏆</p>
+                    </div>
             }
             
         </div>

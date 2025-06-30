@@ -10,4 +10,5 @@ export interface ClubMember {
     lastRegistry: number,
     starBadgeCase: StarBadgeCase,
     lastMegapigs: MegapigStatus[],
+    firstSeason: number,
 }

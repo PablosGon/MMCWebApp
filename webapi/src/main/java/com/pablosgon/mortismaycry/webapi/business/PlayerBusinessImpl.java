@@ -59,7 +59,7 @@ public class PlayerBusinessImpl implements PlayerBusiness {
     }
 
     @Override
-    public Player getPlayer(String tag) {
+    public Player getPlayer(String tag, boolean isAdmin) {
         logger.info("Getting Player {}", tag);
 
         if(tag == null) {
@@ -82,7 +82,11 @@ public class PlayerBusinessImpl implements PlayerBusiness {
             BSPlayer bsPlayer = objectMapper.readValue(response.body(), BSPlayer.class);
             player = modelMapper.map(bsPlayer, Player.class);
             modelMapper.map(jpaPlayer, player);
-            mapMegapigRegistriesToPlayer(jpaPlayer, player);
+
+            if (isAdmin) {
+                mapMegapigRegistriesToPlayer(jpaPlayer, player);
+            }
+
             mapStarBadgesToPlayer(player);
             logger.info("Successfully retrieved player with tag {}", tag);
         } catch (BsNotFoundException e) {

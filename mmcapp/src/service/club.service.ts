@@ -13,7 +13,9 @@ class ClubService {
             const parsedClub: Club = await JSON.parse(club);
             return parsedClub;
         } else {
-            const response = await fetch(this.apiUrl + `club/${clubTag}`);
+            const response = await fetch(this.apiUrl + `club/${clubTag}`, {
+                headers: { "isAdmin": sessionStorage.getItem('admin') ?? "false" }
+            });
 
             if (!response.ok) {
                 throw new Error(`API Error: ${response.status}`);
@@ -32,7 +34,7 @@ class ClubService {
         const response = await fetch(this.apiUrl + 'reportMegapig', {
             method: 'POST',
             body: JSON.stringify({ members: megapigReportMembers }),
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "isAdmin": sessionStorage.getItem('admin') ?? 'false' },
         })
 
         if (!response.ok) {

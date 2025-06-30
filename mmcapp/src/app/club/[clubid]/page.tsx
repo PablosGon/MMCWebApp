@@ -50,11 +50,17 @@ export default function ClubPage() {
 
   if (error) {
     return (
-      <ErrorComponent />
+      <div>
+        <Link href={`/`} className="text-lg">← Volver</Link>
+        <ErrorComponent />
+      </div>
     )
   } else if (!club) {
     return (
-      <LoadingComponent />
+      <div>
+        <Link href={`/`} className="text-lg">← Volver</Link>
+        <LoadingComponent />
+      </div>
     )
   } else {
     return (

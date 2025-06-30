@@ -56,6 +56,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     private Logger logger = LoggerFactory.getLogger(ClubBusinessImpl.class);
 
     private static final int LAST_MEGAPIG_REGISTRIES_LIMIT = 5;
+    private static final int FIRST_SEASON_FOR_NEW_MEMBERS = -1;
 
     public ClubBusinessImpl(
         BSClient bsClient,
@@ -78,7 +79,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     }
 
     @Override
-    public Club getClub(String tag) {
+    public Club getClub(String tag, boolean isAdmin) {
         if (tag == null) {
             throw new IllegalArgumentException("Club tag must not be null");
         }
@@ -91,9 +92,13 @@ public class ClubBusinessImpl implements ClubBusiness {
             HttpResponse<String> response = client.getClub(tag);
             BSClub bsClub = objectMapper.readValue(response.body(), BSClub.class);
             club = modelMapper.map(bsClub, Club.class);
-            mapLastTrophyRegistriesToMembers(club.getMembers());
+            mapSeniorityAndLastTrophyRegistriesToMembers(club.getMembers());
             mapStarBadgesToMembers(club.getMembers());
-            mapLastMegapigsToMembers(club.getMembers());
+
+            if(isAdmin) {
+                mapLastMegapigsToMembers(club.getMembers());
+            }
+
             logger.info("Successfully retrieved club information with tag {}", tag);
         } catch (BsNotFoundException e) {
             logger.error("There was an error while getting the club {}. Club not found", tag);
@@ -184,7 +189,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     }
 
     private void createWeeklyStarPlayers(List<ClubMember> members, int clubIndex, int season, int week) {
-        mapLastTrophyRegistriesToMembers(members);
+        mapSeniorityAndLastTrophyRegistriesToMembers(members);
         members.sort((m1, m2) -> m2.getLastRegistry() - m1.getLastRegistry());
         ClubMember clubMemberWithMostProgression = members.getFirst();
 
@@ -195,12 +200,17 @@ public class ClubBusinessImpl implements ClubBusiness {
         starPlayerRepository.save(newStarPlayer);
     }
 
-    private void mapLastTrophyRegistriesToMembers(List<ClubMember> members) {
+    private void mapSeniorityAndLastTrophyRegistriesToMembers(List<ClubMember> members) {
         List<JPATrophyRegistry> trophyRegistries = trophyRegistryRepository.findAllSorted();
         for (ClubMember clubMember : members) {
             List<JPATrophyRegistry> memberRegistries = trophyRegistries.stream().filter(x -> x.getPlayer().getTag().equals(clubMember.getTag().replace("#", ""))).toList();
+            mapSeniority(clubMember, memberRegistries);
             mapLastRegistry(clubMember, memberRegistries);
         }
+    }
+
+    private void mapSeniority(ClubMember clubMember, List<JPATrophyRegistry> memberRegistries) {
+        clubMember.setFirstSeason(memberRegistries.isEmpty() ? FIRST_SEASON_FOR_NEW_MEMBERS : memberRegistries.getFirst().getSeason());
     }
 
     private void mapLastRegistry(ClubMember clubMember, List<JPATrophyRegistry> memberRegistries) {

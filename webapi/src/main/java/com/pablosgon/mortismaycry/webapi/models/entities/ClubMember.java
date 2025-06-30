@@ -13,6 +13,7 @@ public class ClubMember {
     private int lastRegistry;
     private StarBadgeCase starBadgeCase;
     private List<Integer> lastMegapigs;
+    private int firstSeason;
 
 
     public int getIconId() {
@@ -85,6 +86,14 @@ public class ClubMember {
 
     public void setLastMegapigs(List<Integer> lastMegapigs) {
         this.lastMegapigs = lastMegapigs;
+    }
+
+    public int getFirstSeason() {
+        return this.firstSeason;
+    }
+
+    public void setFirstSeason(int firstSeason) {
+        this.firstSeason = firstSeason;
     }
 
 }

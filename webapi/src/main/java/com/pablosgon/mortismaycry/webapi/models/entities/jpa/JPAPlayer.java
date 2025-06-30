@@ -8,6 +8,7 @@ import java.util.Optional;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,6 +19,7 @@ public class JPAPlayer {
     private String tag;
 
     @OneToMany(mappedBy = "player")
+    @OrderBy("season, week")
     private List<JPATrophyRegistry> trophyRegistries;
 
     @OneToMany(mappedBy = "player")
