@@ -1,17 +1,39 @@
+"use client"
+
 import { CLUBS } from "@/constants/clubs-names.constant";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const adminFlag = sessionStorage.getItem('admin');
+    setIsAdmin(!!adminFlag);
+  }, []);
+
+
   return (
     <div className="flex flex-col gap-5">
       <header className="bg-gray-800 rounded-2xl p-5 flex flex-col gap-2 items-center">
-        <Image src={"/AppLogo_Beta.png"} width={300} height={200} alt="logo beta" className=""/>
+        <Image src={"/AppLogo.png"} width={300} height={200} alt="logo" className=""/>
         <h1 className="text-2xl text-center">
-          ¡Bienvenido a la web de Mortis May Cry!
+          {
+            isAdmin ?
+              'Modo administrador'
+            :
+              '¡Bienvenido a la web de Mortis May Cry!'
+          }
         </h1>
         <p className="text-sm text-center">
-        ¡Más funciones están en camino! Esta aplicación aún está en desarrollo, por lo que es posible que puedas encontrar errores, en cuyo caso agradecemos que los reportes al líder del club para poder solucionarlos lo antes posible. ¡Muchas gracias!
+          {
+            isAdmin ?
+              'Estás en modo administrador. Este te da acceso a información y gestiones exclusivas de los miembros. Si has entrado aquí por error, cierra la aplicación inmediatamente y comunícalo al líder del club'
+            :
+              'Aquí puedes consultar información interesante sobre los diferentes clubes de la comunidad y sus miembros.'
+          }
         </p>
       </header>
 
