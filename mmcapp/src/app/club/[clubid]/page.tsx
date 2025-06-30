@@ -48,6 +48,8 @@ export default function ClubPage() {
     fetchData();
   }, [clubId])
 
+  console.log(members?.map(x => { return [x.name, x.starBadgeCase.grandStarPlayerBadges.filter(x => x.clubId === clubId).length, x.starBadgeCase.grandStarPlayerBadges.length] }))
+
   if (error) {
     return (
       <div>
@@ -101,7 +103,7 @@ export default function ClubPage() {
               members?.map((member:ClubMember, index:number) => (
                 <li className="bg-gray-800 p-3 rounded-2xl " key={member.tag}>
                   <Link href={`/club/${clubId}/player/${member.tag.replace("#", "")}`}>
-                    <ClubMemberItem member={member} index={index}/>
+                    <ClubMemberItem member={member} index={index} clubId={clubId}/>
                   </Link>
                 </li>
               ))

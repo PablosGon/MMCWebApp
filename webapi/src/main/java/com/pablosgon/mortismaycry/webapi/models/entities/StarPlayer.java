@@ -6,6 +6,7 @@ public class StarPlayer {
     private int seasonId;
     private String name;
     private int profileIconId;
+    private int clubId;
     
     public String getPlayerTag() {
         return this.playerTag;
@@ -37,6 +38,14 @@ public class StarPlayer {
 
     public void setProfileIconId(int profileIconId) {
         this.profileIconId = profileIconId;
+    }
+
+    public int getClubId() {
+        return this.clubId;
+    }
+
+    public void setClubId(int clubId) {
+        this.clubId = clubId;
     }
 
 }

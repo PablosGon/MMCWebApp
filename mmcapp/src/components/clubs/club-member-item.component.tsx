@@ -4,11 +4,11 @@ import { ClubMemberBadges } from "./club-member-badges.component";
 import { MegapigStatus } from "@/enums/megapig-status.enum";
 import { MegapigStatusColors } from "@/constants/megapig-status-colors.constant";
 
-export default function ClubMemberItem(params: Readonly<{ member: ClubMember, index:number }>) {
+export default function ClubMemberItem(params: Readonly<{ member: ClubMember, index:number, clubId: number }>) {
 
     const member = params.member;
     const index = params.index;
-
+    const clubId = params.clubId;
     
 
     return (
@@ -28,7 +28,7 @@ export default function ClubMemberItem(params: Readonly<{ member: ClubMember, in
                             <span className="text-teal-300 ml-1">NEW</span> 
                     } 
                 </p>
-                <ClubMemberBadges starBadgeCase={member.starBadgeCase} />
+                <ClubMemberBadges starBadgeCase={member.starBadgeCase} clubId={clubId} />
                 {
                     sessionStorage.getItem('admin') ?
                         <div className="mt-1">

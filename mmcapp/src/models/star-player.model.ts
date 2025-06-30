@@ -3,4 +3,5 @@ export interface StarPlayer {
     seasonId: number,
     name: string,
     profileIconId: number,
+    clubId: number,
 }
