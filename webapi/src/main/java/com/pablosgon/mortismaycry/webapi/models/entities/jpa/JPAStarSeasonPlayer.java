@@ -11,6 +11,14 @@ public class JPAStarSeasonPlayer extends JPAStarPlayer {
     
     private int trophies;
 
+    public JPAStarSeasonPlayer() {
+        super();
+    }
+
+    public JPAStarSeasonPlayer(JPAPlayer player, JPASeason season, int clubId, int trophies) {
+        super(player, season, clubId);
+        this.trophies = trophies;
+    }
 
     public int getTrophies() {
         return this.trophies;

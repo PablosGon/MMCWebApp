@@ -43,8 +43,8 @@ public class BusinessConfig {
     }
 
     @Bean
-    SeasonBusiness seasonBusiness(ModelMapper mapper, SeasonRepository seasonRepository, BSClient client, ObjectMapper objectMapper) {
-        return new SeasonBusinessImpl(mapper, seasonRepository, client, objectMapper);
+    SeasonBusiness seasonBusiness(ModelMapper mapper, SeasonRepository seasonRepository, StarPlayerRepository starPlayerRepository, TrophyRegistryRepository trophyRegistryRepository, BSClient client, ObjectMapper objectMapper) {
+        return new SeasonBusinessImpl(mapper, seasonRepository, starPlayerRepository, trophyRegistryRepository, client, objectMapper);
     }
 
 }

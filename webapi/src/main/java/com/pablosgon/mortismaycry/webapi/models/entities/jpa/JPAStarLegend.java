@@ -11,6 +11,15 @@ public class JPAStarLegend extends JPAStarPlayer {
     
     private int trophies;
 
+    public JPAStarLegend() {
+        super();
+    }
+
+    public JPAStarLegend(JPAPlayer player, JPASeason season, int clubId, int trophies) {
+        super(player, season, clubId);
+        this.trophies = trophies;
+    }
+
 
     public int getTrophies() {
         return this.trophies;

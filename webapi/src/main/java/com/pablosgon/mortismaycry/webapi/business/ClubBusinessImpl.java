@@ -209,8 +209,10 @@ public class ClubBusinessImpl implements ClubBusiness {
     }
 
     private UpdateMembersRequest getCurrentSeasonAndNewWeek() {
-        JPATrophyRegistry lastRegistry = trophyRegistryRepository.findAllSorted().getLast();
-        return new UpdateMembersRequest(lastRegistry.getSeason(), lastRegistry.getWeek() + 1);
+        int currentSeason = seasonRepository.findAllDescOrder().getFirst().getId();
+        List<JPATrophyRegistry> currentSeasonRegistries = trophyRegistryRepository.findRegistriesBySeason(currentSeason);
+
+        return new UpdateMembersRequest(currentSeason, currentSeasonRegistries.isEmpty() ? 0 : currentSeasonRegistries.getFirst().getWeek() + 1);
     }
 
     private void mapLastMegapigsToMembers(List<ClubMember> members) {

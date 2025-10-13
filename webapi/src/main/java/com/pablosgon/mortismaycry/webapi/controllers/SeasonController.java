@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pablosgon.mortismaycry.webapi.business.ClubBusiness;
 import com.pablosgon.mortismaycry.webapi.business.SeasonBusiness;
 import com.pablosgon.mortismaycry.webapi.models.entities.Season;
 import com.pablosgon.mortismaycry.webapi.models.requests.CreateSeasonRequest;
@@ -21,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SeasonController {
     
     private SeasonBusiness business;
+    private ClubBusiness clubBusiness;
 
-    public SeasonController(SeasonBusiness business) {
+    public SeasonController(SeasonBusiness business, ClubBusiness clubBusiness) {
         this.business = business;
+        this.clubBusiness = clubBusiness;
     }
 
     @GetMapping("/seasons")
@@ -38,10 +41,10 @@ public class SeasonController {
     }
     
     @PostMapping("/season")
-    public ResponseEntity<Integer> postSeason(@RequestBody CreateSeasonRequest request) {
-        business.createSeason(request);
-        return ResponseEntity.ok(request.getId());
+    public ResponseEntity<String> newSeason() {
+        String response = business.createSeason();
+        clubBusiness.updateMembers();
+        return ResponseEntity.ok(response);
     }
-    
 
 }

@@ -13,6 +13,9 @@ public interface StarPlayerRepository extends JpaRepository<JPAStarPlayer, Integ
     @Query("select s from JPAStarPlayer s where s.player.tag = :tag")
     List<JPAStarPlayer> findByPlayerTag(String tag);
 
+    @Query("select s from JPAStarPlayer s join JPAStarWeekPlayer sw on s.id = sw.id where s.season.id = :season and s.clubId = :club order by sw.week desc")
+    List<JPAStarPlayer> findStarWeeksBySeasonAndClubId(int season, int clubId);
+
     @Query("select s from JPAStarPlayer s join JPAStarWeekPlayer sw on s.id = sw.id where s.season.id = :season and sw.week = :week order by s.clubId")
     List<JPAStarPlayer> findStarWeekBySeasonAndWeek(int season, int week);
 

@@ -8,6 +8,6 @@ import com.pablosgon.mortismaycry.webapi.models.requests.CreateSeasonRequest;
 public interface SeasonBusiness {
     
     public List<Season> getSeasons();
-    public void createSeason(CreateSeasonRequest request);
+    public String createSeason();
 
 }
