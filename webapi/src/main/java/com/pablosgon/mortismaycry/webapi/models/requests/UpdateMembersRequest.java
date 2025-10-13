@@ -6,6 +6,11 @@ public class UpdateMembersRequest {
     private int week;
 
 
+    public UpdateMembersRequest(int season, int week) {
+        this.season = season;
+        this.week = week;
+    }
+
     public int getSeason() {
         return this.season;
     }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.StringJoiner;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import com.pablosgon.mortismaycry.webapi.models.entities.StarSeasonPlayer;
 import com.pablosgon.mortismaycry.webapi.models.entities.StarWeekPlayer;
 import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSClub;
 import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSClubMember;
+import com.pablosgon.mortismaycry.webapi.models.entities.bs.BSPlayer;
 import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAMegapigRegistry;
 import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPAPlayer;
 import com.pablosgon.mortismaycry.webapi.models.entities.jpa.JPASeason;
@@ -119,22 +122,26 @@ public class ClubBusinessImpl implements ClubBusiness {
     }
 
     @Override
-    public void updateMembers(UpdateMembersRequest request) {
+    public String updateMembers() {
+        String response;
         logger.info("Updating all members");
 
-        if (request == null || invalidUpdateMembersRequest(request) || weekAlreadyRegistered(request.getSeason(), request.getWeek())) {
-            throw new IllegalArgumentException();
-        }
-
         try {
+            UpdateMembersRequest request = getCurrentSeasonAndNewWeek();
+            List<JPAStarWeekPlayer> starPlayers = new ArrayList<>();
             for (int i = 0; i < ClubConstants.getClubIds().length; i++) {
                 List<ClubMember> members = allCurrentMembersFromClub(ClubConstants.getClubIds()[i]);
                 addAllUnregisteredPlayers(members);
-                List<JPATrophyRegistry> newRegistries = trophyRegistriesFromMembers(members, request.getSeason(), request.getWeek());
+                List<JPATrophyRegistry> newRegistries = trophyRegistriesFromMembers(members, request, i);
                 trophyRegistryRepository.saveAll(newRegistries);
-                createWeeklyStarPlayers(members, i, request.getSeason(), request.getWeek());
+
+                if (request.getWeek() > 0) {
+                    starPlayers.add(createWeeklyStarPlayer(members, i, request));
+                }
             }
+            response = updateMembersResponseMessage(starPlayers, request.getSeason(), request.getWeek());
             logger.info("Successfully updated all club members");
+            return response;
         } catch (BsNotFoundException e) {
             logger.error("There was an error while updating members. Club not found");
             throw e;
@@ -175,10 +182,36 @@ public class ClubBusinessImpl implements ClubBusiness {
             logger.error("There was an error while creating the megapig report. Generic error occured. Check stack trace");
             throw new BusinessException();
         }
-
     }
 
     //#region Private methods
+
+    private String updateMembersResponseMessage(List<JPAStarWeekPlayer> starPlayers, int season, int week) throws IOException, InterruptedException {
+        
+        if(starPlayers.size() < 2) {
+            return "";
+        }
+
+        StringJoiner sj = new StringJoiner(" - ");
+        sj.add(String.format("JUGADORES ESTELARES - TEMPORADA %d - SEMANA %d", season, week));
+        for(JPAStarWeekPlayer sp : starPlayers) {
+            HttpResponse<String> bsResponse = client.getPlayer(sp.getPlayer().getTag());
+            BSPlayer bsPlayer = objectMapper.readValue(bsResponse.body(), BSPlayer.class);
+            sj.add(String.format("%s: %s (+%d trofeos)", ClubConstants.getClubNames()[sp.getClubId()], bsPlayer.getName(), sp.getTrophies()));
+        }
+
+        return sj.toString();
+    }
+
+    private boolean starPlayerAlreadyRegistered(UpdateMembersRequest request, int clubId) {
+        Optional<JPAStarPlayer> starPlayer = starPlayerRepository.findStarWeekBySeasonWeekAndClub(request.getSeason(), request.getWeek(), clubId);
+        return starPlayer.isPresent();
+    }
+
+    private UpdateMembersRequest getCurrentSeasonAndNewWeek() {
+        JPATrophyRegistry lastRegistry = trophyRegistryRepository.findAllSorted().getLast();
+        return new UpdateMembersRequest(lastRegistry.getSeason(), lastRegistry.getWeek() + 1);
+    }
 
     private void mapLastMegapigsToMembers(List<ClubMember> members) {
         List<JPAMegapigRegistry> megaPigRegistries = megapigRegistryRepository.findAllSorted();
@@ -188,16 +221,22 @@ public class ClubBusinessImpl implements ClubBusiness {
         }
     }
 
-    private void createWeeklyStarPlayers(List<ClubMember> members, int clubIndex, int season, int week) {
+    private JPAStarWeekPlayer createWeeklyStarPlayer(List<ClubMember> members, int clubIndex, UpdateMembersRequest request) {
+        if (invalidUpdateMembersRequest(request) || starPlayerAlreadyRegistered(request, clubIndex)) {
+            throw new IllegalArgumentException();
+        }
+
         mapSeniorityAndLastTrophyRegistriesToMembers(members);
         members.sort((m1, m2) -> m2.getLastRegistry() - m1.getLastRegistry());
         ClubMember clubMemberWithMostProgression = members.getFirst();
 
         JPAPlayer playerWithMostProgression = playerRepository.findPlayerByTag(clubMemberWithMostProgression.getTag().replace("#", "")).orElse(null);
-        JPASeason jpaSeason = seasonRepository.findById(season).orElse(null);
+        JPASeason jpaSeason = seasonRepository.findById(request.getSeason()).orElse(null);
 
-        JPAStarWeekPlayer newStarPlayer = new JPAStarWeekPlayer(playerWithMostProgression, jpaSeason, week, clubMemberWithMostProgression.getLastRegistry(), clubIndex);
+        JPAStarWeekPlayer newStarPlayer = new JPAStarWeekPlayer(playerWithMostProgression, jpaSeason, request.getWeek(), clubMemberWithMostProgression.getLastRegistry(), clubIndex);
         starPlayerRepository.save(newStarPlayer);
+
+        return newStarPlayer;
     }
 
     private void mapSeniorityAndLastTrophyRegistriesToMembers(List<ClubMember> members) {
@@ -257,6 +296,7 @@ public class ClubBusinessImpl implements ClubBusiness {
     private boolean invalidUpdateMembersRequest(UpdateMembersRequest request) {
         return request.getSeason() < 0
             || request.getWeek() < 0
+            || (request.getWeek() > 0 && !seasonRepository.findById(request.getSeason()).isPresent())
             || request.getWeek() > 5;
     }
 
@@ -291,11 +331,15 @@ public class ClubBusinessImpl implements ClubBusiness {
         return members;
     }
 
-    private List<JPATrophyRegistry> trophyRegistriesFromMembers(List<ClubMember> members, int season, int week) {
+    private List<JPATrophyRegistry> trophyRegistriesFromMembers(List<ClubMember> members, UpdateMembersRequest request, int clubId) {
+        if (invalidUpdateMembersRequest(request) || starPlayerAlreadyRegistered(request, clubId)) {
+            throw new IllegalArgumentException();
+        }
+
         List<JPATrophyRegistry> registries = new ArrayList<>();
 
         for (ClubMember member : members) {
-            JPATrophyRegistry newRegistry = new JPATrophyRegistry(member.getTrophies(), season, week, new JPAPlayer(member.getTag().replace("#", "")));
+            JPATrophyRegistry newRegistry = new JPATrophyRegistry(member.getTrophies(), request.getSeason(), request.getWeek(), new JPAPlayer(member.getTag().replace("#", "")));
             registries.add(newRegistry);
         }
 

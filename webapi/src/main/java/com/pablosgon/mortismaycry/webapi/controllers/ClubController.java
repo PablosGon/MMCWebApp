@@ -41,9 +41,9 @@ public class ClubController {
     }
 
     @PostMapping("/updateMembers")
-    public ResponseEntity<Club> updateMembers(@RequestBody UpdateMembersRequest request) {
-        business.updateMembers(request);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> updateMembers() {
+        String response = business.updateMembers();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/reportMegapig")
